@@ -1,7 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <rect width="512" height="512" fill="#1a1a2e"/>
-  <circle cx="256" cy="256" r="180" fill="none" stroke="#4fc3f7" stroke-width="20"/>
-  <circle cx="256" cy="256" r="60" fill="#4fc3f7"/>
-  <ellipse cx="256" cy="256" rx="180" ry="60" fill="none" stroke="#4fc3f7" stroke-width="12" opacity="0.6" transform="rotate(30 256 256)"/>
-  <ellipse cx="256" cy="256" rx="180" ry="60" fill="none" stroke="#4fc3f7" stroke-width="12" opacity="0.6" transform="rotate(-30 256 256)"/>
+  <!-- ramp -->
+  <polygon points="56,400 456,400 456,392 56,300" fill="#b0bec5"/>
+  <rect x="56" y="300" width="14" height="100" fill="#607d8b"/>
+  <!-- cart on the ramp -->
+  <g transform="translate(270 352) rotate(13)">
+    <rect x="-70" y="-58" width="140" height="44" rx="8" fill="#e53935"/>
+    <circle cx="-44" cy="-8" r="10" fill="#212121"/>
+    <circle cx="44" cy="-8" r="10" fill="#212121"/>
+    <!-- velocity: down the ramp -->
+    <rect x="-20" y="-118" width="80" height="12" fill="#42a5f5"/>
+    <polygon points="60,-130 92,-112 60,-94" fill="#42a5f5"/>
+    <!-- acceleration: backward -->
+    <rect x="-40" y="-168" width="80" height="12" fill="#66bb6a"/>
+    <polygon points="-40,-180 -72,-162 -40,-144" fill="#66bb6a"/>
+  </g>
 </svg>

@@ -1,22 +1,28 @@
 {
-  "name": "scenerystack-template",
+  "name": "backward-acceleration",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "description": "GitHub template for OpenLyceum SceneryStack sims (rename + scaffold-screens for one or N screens).",
+  "description": "Predict, then measure, the velocity and acceleration graphs of a cart released down an incline, braked on a level track, and pushed up a ramp - with a virtual cart or a real PASCO Smart Cart.",
   "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
-    "url": "https://github.com/OpenLyceum/SceneryStackTemplate.git"
+    "url": "https://github.com/OpenLyceum/BackwardAcceleration.git"
   },
   "keywords": [
-    "template",
     "simulation",
     "SceneryStack",
     "interactive",
     "physics",
     "education",
-    "pwa"
+    "pwa",
+    "kinematics",
+    "acceleration",
+    "velocity",
+    "graphs",
+    "PASCO",
+    "Smart Cart",
+    "Web Bluetooth"
   ],
   "scripts": {
     "start": "vite",
@@ -36,13 +42,12 @@
     "test:fuzz:quick": "node scripts/test-fuzz.ts 10",
     "test:fuzz:long": "node scripts/test-fuzz.ts 300",
     "icons": "node scripts/generate-icons.ts",
-    "rename": "node scripts/rename-sim.ts",
-    "scaffold-screens": "node scripts/scaffold-screens.ts",
     "clean": "rm -rf dist",
     "prepare": "git rev-parse --is-inside-work-tree >/dev/null 2>&1 && git config core.hooksPath .githooks || true"
   },
   "dependencies": {
-    "scenerystack": "^3.0.0"
+    "scenerystack": "^3.0.0",
+    "pasco-ble": "0.3.70"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.6.5",

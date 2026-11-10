@@ -21,24 +21,38 @@ import "./brand.js";
 
 import { onReadyToLaunch, PreferencesModel, Sim } from "scenerystack/sim";
 import { Tandem } from "scenerystack/tandem";
+import BackwardAccelerationColors from "./BackwardAccelerationColors.js";
+import { PredictionNotebook } from "./common/model/PredictionNotebook.js";
 import { StringManager } from "./i18n/StringManager.js";
-import { SimPreferencesModel } from "./preferences/SimPreferencesModel.js";
-import { SimPreferencesNode } from "./preferences/SimPreferencesNode.js";
-import SimColors from "./SimColors.js";
-import { SimScreen } from "./sim-screen/SimScreen.js";
+import { LabScreen } from "./lab/LabScreen.js";
+import { BackwardAccelerationPreferencesModel } from "./preferences/BackwardAccelerationPreferencesModel.js";
+import { BackwardAccelerationPreferencesNode } from "./preferences/BackwardAccelerationPreferencesNode.js";
+import { SmartCartScreen } from "./smart-cart/SmartCartScreen.js";
 
 onReadyToLaunch(() => {
   const stringManager = StringManager.getInstance();
 
-  // Simulation-specific preferences; initial values come from simQueryParameters.
-  const simPreferences = new SimPreferencesModel(Tandem.ROOT.createTandem("preferences"));
+  // Simulation-specific preferences; initial values come from backwardAccelerationQueryParameters.
+  const simPreferences = new BackwardAccelerationPreferencesModel(Tandem.ROOT.createTandem("preferences"));
+
+  // One notebook of predictions and sign tables for both screens: predict once, then
+  // compare with the virtual cart and with the real Smart Cart.
+  const notebook = new PredictionNotebook();
 
   const screens = [
-    new SimScreen({
-      // The screen name Property updates automatically when the locale changes
-      name: stringManager.getScreenNames().simStringProperty,
-      tandem: Tandem.ROOT.createTandem("simScreen"),
-      backgroundColorProperty: SimColors.backgroundColorProperty,
+    new LabScreen({
+      name: stringManager.getScreenNames().labStringProperty,
+      tandem: Tandem.ROOT.createTandem("labScreen"),
+      notebook,
+      smoothing: simPreferences,
+      backgroundColorProperty: BackwardAccelerationColors.backgroundColorProperty,
+    }),
+    new SmartCartScreen({
+      name: stringManager.getScreenNames().smartCartStringProperty,
+      tandem: Tandem.ROOT.createTandem("smartCartScreen"),
+      notebook,
+      smoothing: simPreferences,
+      backgroundColorProperty: BackwardAccelerationColors.backgroundColorProperty,
     }),
   ];
 
@@ -53,7 +67,7 @@ onReadyToLaunch(() => {
       simulationOptions: {
         customPreferences: [
           {
-            createContent: (tandem: Tandem) => new SimPreferencesNode(simPreferences, tandem),
+            createContent: (tandem: Tandem) => new BackwardAccelerationPreferencesNode(simPreferences, tandem),
           },
         ],
       },
@@ -65,9 +79,9 @@ onReadyToLaunch(() => {
 
     // Optional: fill in credits shown in Help → About
     credits: {
-      leadDesign: "",
-      softwareDevelopment: "",
-      team: "",
+      leadDesign: "Martin Veillette",
+      softwareDevelopment: "Martin Veillette",
+      team: "OpenLyceum",
       qualityAssurance: "",
     },
   });
