@@ -136,7 +136,7 @@ npm run lint && npm run check && npm test && npm run build
 | `npm run test:fuzz` | Playwright fuzz smoke (pointer + keyboard, `?ea`, 30s each) |
 | `npm run test:fuzz:quick` | 10s fuzz |
 | `npm run icons` | Regenerate PWA icons; seed missing screenshots, preserve existing ones |
-| `npm run release` | `check && lint && build && test`, then version patch + push tags |
+| `npm run release` | `check && lint && check:architecture && build && test`, then version patch + push tags |
 
 Query parameters: `velocityWindow`, `accelerationWindow` (odd, 3–41 samples),
 `smartCartPeriod` (ms, default 20), `showDiagnostics` (Smart Cart stream statistics).
