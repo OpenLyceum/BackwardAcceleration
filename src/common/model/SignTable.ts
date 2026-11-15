@@ -12,7 +12,7 @@ import { BooleanProperty, Property, type TProperty } from "scenerystack/axon";
 import BackwardAccelerationNamespace from "../../BackwardAccelerationNamespace.js";
 import { Sign, type SignValue } from "./motionAnalysis.js";
 
-export const PHASE_COUNT = 3;
+const PHASE_COUNT = 3;
 
 export type CellAnswer = SignValue | null;
 

@@ -72,7 +72,7 @@ export const MAX_CART_POSITION = TRACK_LENGTH - CART_LENGTH / 2 - 0.02;
 const REST_TIME_TO_FINISH = 0.4;
 
 /** Clock speed in slow motion. */
-export const SLOW_MOTION_FACTOR = 0.25;
+const SLOW_MOTION_FACTOR = 0.25;
 
 /** Longest frame dt honoured, s (a backgrounded tab must not teleport the cart). */
 const MAX_FRAME_DT = 0.1;

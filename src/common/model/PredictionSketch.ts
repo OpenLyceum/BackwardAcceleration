@@ -25,8 +25,6 @@ export const SketchLayer = {
 
 export type SketchLayerValue = (typeof SketchLayer)[keyof typeof SketchLayer];
 
-export const SKETCH_LAYERS: readonly SketchLayerValue[] = [SketchLayer.INDIVIDUAL, SketchLayer.GROUP];
-
 /** Points closer than this, in model units of time (s), are merged while drawing. */
 const MIN_POINT_SPACING = 1e-3;
 

@@ -36,17 +36,17 @@ export type TrackParameters = {
   readonly friction: number;
 };
 
-export function sinTheta(params: TrackParameters): number {
+function sinTheta(params: TrackParameters): number {
   return Math.min(1, Math.max(0, params.inclineHeight / params.trackLength));
 }
 
 /** Component of gravity along the track toward the low end, m/s². */
-export function gravityAlongTrack(params: TrackParameters): number {
+function gravityAlongTrack(params: TrackParameters): number {
   return GRAVITY * sinTheta(params);
 }
 
 /** Magnitude of the friction acceleration, m/s². */
-export function frictionMagnitude(params: TrackParameters): number {
+function frictionMagnitude(params: TrackParameters): number {
   const sin = sinTheta(params);
   return params.friction * GRAVITY * Math.sqrt(1 - sin * sin);
 }

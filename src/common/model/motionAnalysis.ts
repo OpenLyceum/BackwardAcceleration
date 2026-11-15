@@ -137,7 +137,7 @@ export const Sign = {
 
 export type SignValue = (typeof Sign)[keyof typeof Sign];
 
-export function signOf(value: number, tolerance: number): SignValue {
+function signOf(value: number, tolerance: number): SignValue {
   return value > tolerance ? Sign.POSITIVE : value < -tolerance ? Sign.NEGATIVE : Sign.ZERO;
 }
 

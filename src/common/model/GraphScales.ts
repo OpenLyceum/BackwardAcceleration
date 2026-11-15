@@ -24,7 +24,7 @@ export const TIME_LEVELS: readonly ZoomLevel[] = [
 ];
 
 /** Velocity extent ±max, m/s. */
-export const VELOCITY_LEVELS: readonly ZoomLevel[] = [
+const VELOCITY_LEVELS: readonly ZoomLevel[] = [
   { max: 0.25, step: 0.05 },
   { max: 0.5, step: 0.1 },
   { max: 1, step: 0.25 },
@@ -33,7 +33,7 @@ export const VELOCITY_LEVELS: readonly ZoomLevel[] = [
 ];
 
 /** Acceleration extent ±max, m/s². */
-export const ACCELERATION_LEVELS: readonly ZoomLevel[] = [
+const ACCELERATION_LEVELS: readonly ZoomLevel[] = [
   { max: 0.25, step: 0.05 },
   { max: 0.5, step: 0.1 },
   { max: 1, step: 0.25 },
