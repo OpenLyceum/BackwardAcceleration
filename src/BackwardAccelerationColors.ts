@@ -218,6 +218,14 @@ const BackwardAccelerationColors = {
     default: "#ffb74d",
     projector: "#e65100",
   }),
+
+  // ── Moved from views (no-inline-color) ─────────────────────────────────────
+
+  /** Label on saturated (measured / incorrect) push buttons; white in both profiles. */
+  accentButtonTextColorProperty: new ProfileColorProperty(BackwardAccelerationNamespace, "accentButtonText", {
+    default: "#ffffff",
+    projector: "#ffffff",
+  }),
 };
 
 export default BackwardAccelerationColors;
