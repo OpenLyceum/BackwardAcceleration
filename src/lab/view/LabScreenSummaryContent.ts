@@ -6,6 +6,7 @@
  */
 
 import { DerivedProperty } from "scenerystack/axon";
+import { toFixed } from "scenerystack/dot";
 import { ScreenSummaryContent } from "scenerystack/sim";
 import { StringManager } from "../../i18n/StringManager.js";
 import type { LabModel } from "../model/LabModel.js";
@@ -31,7 +32,7 @@ export class LabScreenSummaryContent extends ScreenSummaryContent {
       (pattern, experiment, height, brake, on, off, status) =>
         pattern
           .replace("{{experiment}}", experiment)
-          .replace("{{height}}", (height * 100).toFixed(0))
+          .replace("{{height}}", toFixed(height * 100, 0))
           .replace("{{brake}}", brake ? on : off)
           .replace("{{status}}", status),
     );

@@ -12,7 +12,7 @@ import { TRACK_NODE_SETTINGS } from "../../BackwardAccelerationConstants.js";
  */
 
 import { Multilink } from "scenerystack/axon";
-import { Bounds2, clamp, Vector2 } from "scenerystack/dot";
+import { Bounds2, clamp, toFixed, Vector2 } from "scenerystack/dot";
 import { Shape } from "scenerystack/kite";
 import { Circle, Line, Node, Path, Rectangle, RichDragListener, Text } from "scenerystack/scenery";
 import { ArrowNode, PhetFont } from "scenerystack/scenery-phet";
@@ -187,7 +187,7 @@ export class TrackNode extends Node {
       bumper.translation = lowEnd.minus(direction.timesScalar(BUMPER_WIDTH));
       heightLabel.string = labels.heightPatternStringProperty.value.replace(
         "{{value}}",
-        (model.inclineHeightProperty.value * 100).toFixed(1).replace(/\.0$/, ""),
+        toFixed(model.inclineHeightProperty.value * 100, 1).replace(/\.0$/, ""),
       );
       heightLabel.right = high.x - TRACK_NODE_SETTINGS.UPDATE_TRACK_RIGHT_OFFSET;
       heightLabel.centerY = high.y + feetHeight / 2;

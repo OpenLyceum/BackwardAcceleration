@@ -31,7 +31,7 @@ import {
   TickLabelSet,
   TickMarkSet,
 } from "scenerystack/bamboo";
-import { Range, Vector2 } from "scenerystack/dot";
+import { Range, toFixed, Vector2 } from "scenerystack/dot";
 import { Shape } from "scenerystack/kite";
 import { Orientation } from "scenerystack/phet-core";
 import { Node, Path, Text } from "scenerystack/scenery";
@@ -149,7 +149,7 @@ export class KinematicsGraphNode extends Node {
       new Text(
         Number.isInteger(value)
           ? value.toString()
-          : value.toFixed(KINEMATICS_GRAPH_NODE_SETTINGS.LABEL_DECIMAL_PLACES).replace(/0$/, ""),
+          : toFixed(value, KINEMATICS_GRAPH_NODE_SETTINGS.LABEL_DECIMAL_PLACES).replace(/0$/, ""),
         {
           font: TICK_FONT,
           fill: BackwardAccelerationColors.textColorProperty,

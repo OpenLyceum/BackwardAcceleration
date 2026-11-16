@@ -1,3 +1,4 @@
+import { toFixed } from "scenerystack/dot";
 import {
   ACQUISITION_UNITS,
   HARDWARE_POLL_INTERVAL_MS,
@@ -153,7 +154,7 @@ export class SmartCartChannel {
       this.windowStart = now;
       this.samplesInWindow = 0;
       const detail = this.device.diagnostic ?? "";
-      this.diagnosticProperty.value = `${detail}${detail ? " · " : ""}${this.sampleRate.toFixed(0)} samples/s`;
+      this.diagnosticProperty.value = `${detail}${detail ? " · " : ""}${toFixed(this.sampleRate, 0)} samples/s`;
     }
   }
 
