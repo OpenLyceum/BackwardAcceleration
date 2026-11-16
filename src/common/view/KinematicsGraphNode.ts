@@ -16,6 +16,9 @@ import { KINEMATICS_GRAPH_NODE_SETTINGS } from "../../BackwardAccelerationConsta
  *
  * Redrawing is explicit (refresh): the owning GraphArea calls it when data, the
  * experiment, a sketch, or the zoom changes, so a frame costs nothing when idle.
+ *
+ * Trim markers live in TrimMarkersLayer; freehand strokes and zoom wiring in
+ * sketchDrawing / graphZoom.
  */
 
 import type { NumberProperty, TReadOnlyProperty } from "scenerystack/axon";
@@ -28,19 +31,21 @@ import {
   TickLabelSet,
   TickMarkSet,
 } from "scenerystack/bamboo";
-import { clamp, Matrix3, Range, Vector2 } from "scenerystack/dot";
+import { Range, Vector2 } from "scenerystack/dot";
 import { Shape } from "scenerystack/kite";
 import { Orientation } from "scenerystack/phet-core";
-import { DragListener, Line, Node, Path, Rectangle, RichDragListener, Text } from "scenerystack/scenery";
+import { Node, Path, Text } from "scenerystack/scenery";
 import { PhetFont } from "scenerystack/scenery-phet";
 import BackwardAccelerationColors from "../../BackwardAccelerationColors.js";
-import { MAX_RUN_TIME } from "../../BackwardAccelerationConstants.js";
 import { EXPERIMENTS } from "../model/Experiment.js";
 import { GraphScales, TIME_LEVELS } from "../model/GraphScales.js";
 import type { PredictionNotebook } from "../model/PredictionNotebook.js";
-import { Quantity, type QuantityValue, SketchLayer, type Stroke } from "../model/PredictionSketch.js";
+import { Quantity, type QuantityValue, SketchLayer } from "../model/PredictionSketch.js";
 import type { RunLibrary } from "../model/RunLibrary.js";
 import type { MotionSeries } from "../model/Trace.js";
+import { installGraphZoom } from "./graphZoom.js";
+import { installSketchDrawing, strokesShape } from "./sketchDrawing.js";
+import { TrimMarkersLayer, type TrimMarkersOptions } from "./TrimMarkersLayer.js";
 
 const LEFT_INSET: number = KINEMATICS_GRAPH_NODE_SETTINGS.LEFT_INSET; // axis title + tick labels
 const BOTTOM_INSET: number = KINEMATICS_GRAPH_NODE_SETTINGS.BOTTOM_INSET; // tick labels + axis title
@@ -56,9 +61,6 @@ const SKETCH_LINE_WIDTH: number = KINEMATICS_GRAPH_NODE_SETTINGS.SKETCH_LINE_WID
 const INDIVIDUAL_DASH = [9, 5];
 const GROUP_DASH = [2, 4];
 
-/** Keyboard step of a trim marker, in view px (the time per px depends on zoom). */
-const MARKER_DRAG_DELTA: number = KINEMATICS_GRAPH_NODE_SETTINGS.MARKER_DRAG_DELTA;
-
 export type KinematicsGraphNodeOptions = {
   readonly quantity: QuantityValue;
   readonly width: number;
@@ -68,11 +70,7 @@ export type KinematicsGraphNodeOptions = {
   readonly accessibleName: TReadOnlyProperty<string>;
   readonly accessibleHelpText: TReadOnlyProperty<string>;
   /** Shows the release / catch markers on the full recording (Smart Cart screen). */
-  readonly trimMarkers?: {
-    readonly releaseName: TReadOnlyProperty<string>;
-    readonly catchName: TReadOnlyProperty<string>;
-    readonly helpText: TReadOnlyProperty<string>;
-  };
+  readonly trimMarkers?: TrimMarkersOptions;
 };
 
 function valuesOf(series: MotionSeries, quantity: QuantityValue): readonly number[] {
@@ -98,10 +96,7 @@ export class KinematicsGraphNode extends Node {
   private readonly otherRunsLayer: Node;
   private readonly individualPath: Path;
   private readonly groupPath: Path;
-  private readonly shadeBefore: Rectangle;
-  private readonly shadeAfter: Rectangle;
-  private readonly viewWidth: number;
-  private readonly viewHeight: number;
+  private readonly trimLayer: TrimMarkersLayer | null = null;
 
   public constructor(runs: RunLibrary, notebook: PredictionNotebook, options: KinematicsGraphNodeOptions) {
     super({ isDisposable: false });
@@ -111,8 +106,6 @@ export class KinematicsGraphNode extends Node {
 
     const viewWidth = options.width - LEFT_INSET - RIGHT_INSET;
     const viewHeight = options.height - TOP_INSET - BOTTOM_INSET;
-    this.viewWidth = viewWidth;
-    this.viewHeight = viewHeight;
 
     const valueLevels = GraphScales.valueLevels(options.quantity);
     const valueLevelProperty: NumberProperty = runs.scales.valueLevelProperty(options.quantity);
@@ -195,117 +188,34 @@ export class KinematicsGraphNode extends Node {
       pickable: false,
     });
 
-    this.shadeBefore = new Rectangle(0, 0, 0, viewHeight, {
-      fill: BackwardAccelerationColors.trimShadeColorProperty,
-      pickable: false,
-    });
-    this.shadeAfter = new Rectangle(0, 0, 0, viewHeight, {
-      fill: BackwardAccelerationColors.trimShadeColorProperty,
-      pickable: false,
-    });
+    installSketchDrawing(chartRectangle, chartTransform, viewWidth, viewHeight, runs, notebook, options.quantity);
 
-    // ── Drawing predictions ────────────────────────────────────────────────────
-    const modelPointAt = (globalPoint: Vector2): Vector2 => {
-      const local = chartRectangle.globalToLocalPoint(globalPoint);
-      return chartTransform.viewToModelPosition(
-        new Vector2(clamp(local.x, 0, viewWidth), clamp(local.y, 0, viewHeight)),
-      );
-    };
-    chartRectangle.addInputListener(
-      new DragListener({
-        start: (event) => {
-          const mode = notebook.drawModeProperty.value;
-          if (mode === "off") {
-            return;
-          }
-          // Drawing on a hidden layer would be invisible; show it.
-          (mode === SketchLayer.INDIVIDUAL ? notebook.showIndividualProperty : notebook.showGroupProperty).value = true;
-          notebook
-            .sketchFor(runs.experimentProperty.value)
-            .beginStroke(options.quantity, mode, modelPointAt(event.pointer.point));
-        },
-        drag: (event) => {
-          if (notebook.drawModeProperty.value !== "off") {
-            notebook.sketchFor(runs.experimentProperty.value).extendStroke(modelPointAt(event.pointer.point));
-          }
-        },
-        end: () => notebook.sketchFor(runs.experimentProperty.value).endStroke(),
-      }),
-    );
-    notebook.drawModeProperty.link((mode) => {
-      chartRectangle.cursor = mode === "off" ? null : "crosshair";
-    });
+    const clippedChildren: Node[] = [
+      verticalGrid,
+      horizontalGrid,
+      zeroAxis,
+      this.otherRunsLayer,
+      this.measuredPlot,
+      this.groupPath,
+      this.individualPath,
+    ];
 
-    // ── Trim markers (Smart Cart screen) ─────────────────────────────────────────
-    const markerLayer = new Node();
+    let markerLayer: Node = new Node();
     if (options.trimMarkers) {
-      const createMarker = (accessibleName: TReadOnlyProperty<string>) =>
-        new Node({
-          cursor: "ew-resize",
-          tagName: "div",
-          focusable: true,
-          accessibleName,
-          accessibleHelpText: options.trimMarkers?.helpText ?? null,
-          children: [
-            new Rectangle(
-              KINEMATICS_GRAPH_NODE_SETTINGS.CREATE_MARKER_X,
-              0,
-              KINEMATICS_GRAPH_NODE_SETTINGS.CREATE_MARKER_WIDTH,
-              viewHeight,
-              { fill: "transparent" },
-            ),
-            new Line(0, 0, 0, viewHeight, {
-              stroke: BackwardAccelerationColors.trimHandleColorProperty,
-              lineWidth: KINEMATICS_GRAPH_NODE_SETTINGS.CREATE_MARKER_LINE_WIDTH,
-            }),
-            new Path(
-              Shape.regularPolygon(3, KINEMATICS_GRAPH_NODE_SETTINGS.CREATE_MARKER_RADIUS).transformed(
-                Matrix3.rotation2(Math.PI / 2),
-              ),
-              {
-                fill: BackwardAccelerationColors.trimHandleColorProperty,
-                y: KINEMATICS_GRAPH_NODE_SETTINGS.CREATE_MARKER_Y,
-              },
-            ),
-          ],
-        });
-      const releaseMarker = createMarker(options.trimMarkers.releaseName);
-      const catchMarker = createMarker(options.trimMarkers.catchName);
-      this.releaseMarker = releaseMarker;
-      this.catchMarker = catchMarker;
-
-      const timeFromViewX = (x: number) => clamp(chartTransform.viewToModelX(clamp(x, 0, viewWidth)), 0, MAX_RUN_TIME);
-      const attach = (marker: Node, isStart: boolean) => {
-        const set = (t: number) => {
-          const trace = runs.currentTrace;
-          if (trace.isEmpty) {
-            return;
-          }
-          const end = Math.min(trace.windowEndProperty.value, trace.duration);
-          const start = trace.windowStartProperty.value;
-          if (isStart) {
-            trace.windowStartProperty.value = clamp(t, 0, end - 0.1);
-          } else {
-            trace.windowEndProperty.value = clamp(t, start + 0.1, trace.duration);
-          }
-        };
-        marker.addInputListener(
-          new RichDragListener({
-            dragListenerOptions: {
-              drag: (event) => set(timeFromViewX(chartRectangle.globalToLocalPoint(event.pointer.point).x)),
-            },
-            keyboardDragListenerOptions: {
-              keyboardDragDirection: "leftRight",
-              dragDelta: MARKER_DRAG_DELTA,
-              shiftDragDelta: 1,
-              drag: (_event, listener) => set(timeFromViewX(marker.x + listener.modelDelta.x)),
-            },
-          }),
-        );
-      };
-      attach(releaseMarker, true);
-      attach(catchMarker, false);
-      markerLayer.children = [releaseMarker, catchMarker];
+      const trimLayer = new TrimMarkersLayer(
+        runs,
+        chartTransform,
+        chartRectangle,
+        viewWidth,
+        viewHeight,
+        options.trimMarkers,
+      );
+      this.trimLayer = trimLayer;
+      this.releaseMarker = trimLayer.releaseMarker;
+      this.catchMarker = trimLayer.catchMarker;
+      // Shades sit under the plots; markers sit above the clipped layer.
+      clippedChildren.splice(3, 0, trimLayer.shadeBefore, trimLayer.shadeAfter);
+      markerLayer = trimLayer;
     }
 
     const plotLayer = new Node({
@@ -316,17 +226,7 @@ export class KinematicsGraphNode extends Node {
         new Node({
           clipArea: Shape.rect(0, 0, viewWidth, viewHeight),
           pickable: false,
-          children: [
-            verticalGrid,
-            horizontalGrid,
-            zeroAxis,
-            this.shadeBefore,
-            this.shadeAfter,
-            this.otherRunsLayer,
-            this.measuredPlot,
-            this.groupPath,
-            this.individualPath,
-          ],
+          children: clippedChildren,
         }),
         markerLayer,
         yTicks,
@@ -359,51 +259,16 @@ export class KinematicsGraphNode extends Node {
 
     this.children = [plotLayer, yTitle, xTitle];
 
-    // ── Zoom ────────────────────────────────────────────────────────────────────
-    valueLevelProperty.link((index) => {
-      const level = valueLevels[index];
-      if (level) {
-        chartTransform.setModelYRange(new Range(-level.max, level.max));
-        horizontalGrid.setSpacing(level.step);
-        yTicks.setSpacing(level.step);
-        yLabels.setSpacing(level.step);
-      }
-    });
-    runs.scales.timeLevelProperty.link((index) => {
-      const level = TIME_LEVELS[index];
-      if (level) {
-        chartTransform.setModelXRange(new Range(0, level.max));
-        verticalGrid.setSpacing(level.step);
-        xTicks.setSpacing(level.step);
-        xLabels.setSpacing(level.step);
-      }
-    });
+    installGraphZoom(
+      { chartTransform, horizontalGrid, verticalGrid, yTicks, yLabels, xTicks, xLabels },
+      valueLevels,
+      valueLevelProperty,
+      runs.scales.timeLevelProperty,
+    );
     // LinePlot follows the transform itself; the sketch paths and markers do not.
     chartTransform.changedEmitter.addListener(() => this.refresh());
 
     this.refresh();
-  }
-
-  private strokesShape(strokes: readonly Stroke[]): Shape | null {
-    if (strokes.length === 0) {
-      return null;
-    }
-    const shape = new Shape();
-    for (const stroke of strokes) {
-      stroke.forEach((point, i) => {
-        const view = this.chartTransform.modelToViewPosition(point);
-        if (i === 0) {
-          shape.moveToPoint(view);
-          // A single click leaves a dot.
-          if (stroke.length === 1) {
-            shape.lineToPoint(view.plusXY(KINEMATICS_GRAPH_NODE_SETTINGS.PLUS_XY_X_OFFSET, 0));
-          }
-        } else {
-          shape.lineToPoint(view);
-        }
-      });
-    }
-    return shape;
   }
 
   /** Redraws data, other runs, sketches, and trim shading for the current experiment. */
@@ -429,30 +294,17 @@ export class KinematicsGraphNode extends Node {
     }
 
     const sketch = this.notebook.sketchFor(experiment);
-    this.individualPath.shape = this.strokesShape(sketch.getStrokes(this.quantity, SketchLayer.INDIVIDUAL));
-    this.groupPath.shape = this.strokesShape(sketch.getStrokes(this.quantity, SketchLayer.GROUP));
+    this.individualPath.shape = strokesShape(
+      this.chartTransform,
+      sketch.getStrokes(this.quantity, SketchLayer.INDIVIDUAL),
+    );
+    this.groupPath.shape = strokesShape(this.chartTransform, sketch.getStrokes(this.quantity, SketchLayer.GROUP));
     this.individualPath.visible = this.notebook.showIndividualProperty.value;
     this.groupPath.visible = this.notebook.showGroupProperty.value;
 
     // Trim shading and markers only make sense on the full recording.
     const trace = runs.traceFor(experiment);
-    const showTrim = runs.showFullRecordingProperty.value && !trace.isEmpty && this.releaseMarker !== null;
-    this.shadeBefore.visible = showTrim;
-    this.shadeAfter.visible = showTrim;
-    if (this.releaseMarker && this.catchMarker) {
-      this.releaseMarker.visible = showTrim;
-      this.catchMarker.visible = showTrim;
-    }
-    if (showTrim) {
-      const toX = (t: number) => clamp(this.chartTransform.modelToViewX(t), 0, this.viewWidth);
-      const startX = toX(trace.windowStartProperty.value);
-      const endX = toX(Math.min(trace.windowEndProperty.value, trace.duration));
-      this.shadeBefore.setRect(0, 0, startX, this.viewHeight);
-      this.shadeAfter.setRect(endX, 0, Math.max(0, this.viewWidth - endX), this.viewHeight);
-      if (this.releaseMarker && this.catchMarker) {
-        this.releaseMarker.x = startX;
-        this.catchMarker.x = endX;
-      }
-    }
+    const showTrim = runs.showFullRecordingProperty.value && !trace.isEmpty && this.trimLayer !== null;
+    this.trimLayer?.refresh(trace, showTrim);
   }
 }

@@ -38,7 +38,10 @@ before changing model code.
 | `src/common/model/motionAnalysis.ts` | Finds release and catch in a recording; measured signs per phase for the sign table |
 | `src/common/model/RunLibrary.ts` | Per screen: selected experiment, last run of each experiment, full/trimmed view, graph zoom |
 | `src/common/model/PredictionNotebook.ts` | Sketches (`PredictionSketch`) and sign tables (`SignTable`) per experiment — **shared by both screens** |
-| `src/common/view/KinematicsGraphNode.ts` | bamboo v–t / a–t graph: other runs, measured, group and individual sketches, freehand drawing, trim markers |
+| `src/common/view/KinematicsGraphNode.ts` | bamboo v–t / a–t graph: other runs, measured, sketches; orchestrates trim / drawing / zoom helpers |
+| `src/common/view/TrimMarkersLayer.ts` | Release / catch markers and trim shading (Smart Cart full recording) |
+| `src/common/view/sketchDrawing.ts` | Freehand stroke → Shape and plot DragListener |
+| `src/common/view/graphZoom.ts` | Value / time zoom → ChartTransform and tick spacing |
 | `src/common/view/GraphArea.ts` | Both graphs, zoom buttons, legend; the single place that triggers redraws |
 | `src/common/view/SignTableNode.ts` | Cycle-button sign table with check-against-run marks (also the keyboard way to predict) |
 | `src/lab/model/LabModel.ts` | Virtual cart: presets, go / catch / return, 50 Hz encoder sampling, run end detection |
