@@ -148,17 +148,18 @@ export const BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS = {
   VELOCITY_START_Y: 185,
   VELOCITY_END_Y: 335,
   VELOCITY_LINE_WIDTH: 10,
-  X_X: 274,
-  Y_Y: 140,
+  /** Cart placement on the Smart Cart home-screen icon (px). */
+  SMART_CART_ICON_CART_X: 274,
+  SMART_CART_ICON_CART_Y: 140,
 } as const;
 
 /** Settings for common/model/GraphScales.ts. */
 export const GRAPH_SCALES_SETTINGS = {
-  /** Acceleration extent ±max, m/s². */
+  /** Initial TIME_LEVELS index (5 s at index 2). */
   DEFAULT_TIME_LEVEL: 2,
-  /** Acceleration extent ±max, m/s². */
+  /** Initial VELOCITY_LEVELS / ACCELERATION_LEVELS index (±1 at index 2). */
   DEFAULT_VALUE_LEVEL: 2,
-  /** Acceleration extent ±max, m/s². */
+  /** ACCELERATION_LEVELS index used after a brake run (±2 m/s² at index 3). */
   BRAKE_ACCELERATION_LEVEL: 3,
 } as const;
 
@@ -255,7 +256,7 @@ export const PREDICTIONS_PANEL_SETTINGS = {
   ERASE_BUTTON_MAX_WIDTH_OFFSET: 20, // px
 
   TITLE_FONT_SIZE: 14,
-  FONT_FONT_SIZE: 12,
+  FONT_SIZE: 12,
   DRAW_MODE_GROUP_SPACING: 5,
   DRAW_MODE_GROUP_RADIUS: 7,
   ERASE_BUTTON_X_MARGIN: 6,
@@ -292,8 +293,6 @@ export const SIGN_TABLE_NODE_SETTINGS = {
 export const LAB_MODEL_SETTINGS = {
   /** Minimum clearance from the track bumper (m). */
   BUMPER_CLEARANCE: 0.02,
-  /** Milliseconds in one second. */
-  MILLISECONDS_PER_SECOND: 1000,
   /** Tolerance at a sampling boundary (s). */
   SAMPLE_TIME_EPSILON: 1e-9,
   /** Smallest remaining interval worth integrating (s). */
@@ -435,8 +434,6 @@ export const BLUETOOTH_SMART_CART_SETTINGS = {
 export const SMART_CART_CHANNEL_SETTINGS = {
   /** Window used to report sample rate (ms). */
   RATE_WINDOW_MS: 1000,
-  /** Milliseconds in one second. */
-  MILLISECONDS_PER_SECOND: 1000,
   /** Consecutive failed reads after which the link is considered lost. */
   MAX_FAILURES: 5,
 } as const;
@@ -470,7 +467,7 @@ export const RECORDING_PANEL_SETTINGS = {
   FULL_RECORDING_CHECKBOX_MAX_WIDTH_OFFSET: 30, // px
   AUTO_TRIM_BUTTON_MAX_WIDTH_OFFSET: 20, // px
 
-  FONT_FONT_SIZE: 12,
+  FONT_SIZE: 12,
   BUTTON_FONT_SIZE: 14,
   RECORD_BUTTON_MAX_WIDTH: 90,
   CLEAR_BUTTON_MAX_WIDTH: 90,
@@ -482,12 +479,14 @@ export const RECORDING_PANEL_SETTINGS = {
 /** Settings for smart-cart/view/SmartCartPanel.ts. Layout lengths are in px; counts and ratios are dimensionless. */
 export const SMART_CART_PANEL_SETTINGS = {
   ITEM_1_SPACING: 10, // px
-  PHET_FONT_FONT_SIZE: 11, // px
-  PHET_FONT_FONT_SIZE_SEGMENT_2: 10, // px
+  /** Font size for error / unsupported messages (px). */
+  ERROR_FONT_SIZE: 11, // px
+  /** Font size for the diagnostics readout (px). */
+  DIAGNOSTIC_FONT_SIZE: 10, // px
 
   CHANGE_SIGN_CHECKBOX_MAX_WIDTH_OFFSET: 30, // px
 
-  FONT_FONT_SIZE: 12,
+  FONT_SIZE: 12,
   CONNECT_BUTTON_FONT_SIZE: 13,
   CONNECT_BUTTON_MAX_WIDTH: 100,
   CONSTRUCTOR_SPACING: 5,

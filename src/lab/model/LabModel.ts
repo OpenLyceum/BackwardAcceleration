@@ -1,4 +1,19 @@
-import { LAB_MODEL_SETTINGS } from "../../BackwardAccelerationConstants.js";
+import {
+  ACQUISITION_UNITS,
+  BRAKE_FRICTION,
+  CART_LENGTH,
+  ENCODER_RESOLUTION,
+  LAB_MODEL_SETTINGS,
+  MAX_INCLINE_HEIGHT,
+  MAX_PUSH_SPEED,
+  MAX_RUN_TIME,
+  MIN_INCLINE_HEIGHT,
+  MIN_PUSH_SPEED,
+  PHYSICS_SUBSTEP,
+  ROLLING_FRICTION,
+  SAMPLE_PERIOD_MS,
+  TRACK_LENGTH,
+} from "../../BackwardAccelerationConstants.js";
 /**
  * LabModel.ts
  *
@@ -21,20 +36,6 @@ import { LAB_MODEL_SETTINGS } from "../../BackwardAccelerationConstants.js";
 import { BooleanProperty, DerivedProperty, NumberProperty, Property, type TReadOnlyProperty } from "scenerystack/axon";
 import { Range } from "scenerystack/dot";
 import type { TModel } from "scenerystack/joist";
-import {
-  BRAKE_FRICTION,
-  CART_LENGTH,
-  ENCODER_RESOLUTION,
-  MAX_INCLINE_HEIGHT,
-  MAX_PUSH_SPEED,
-  MAX_RUN_TIME,
-  MIN_INCLINE_HEIGHT,
-  MIN_PUSH_SPEED,
-  PHYSICS_SUBSTEP,
-  ROLLING_FRICTION,
-  SAMPLE_PERIOD_MS,
-  TRACK_LENGTH,
-} from "../../BackwardAccelerationConstants.js";
 import BackwardAccelerationNamespace from "../../BackwardAccelerationNamespace.js";
 import { accelerationAt, advanceCart, type TrackParameters } from "../../common/model/cartPhysics.js";
 import { EXPERIMENT_PRESETS, LaunchMode, type LaunchModeValue } from "../../common/model/Experiment.js";
@@ -251,7 +252,7 @@ export class LabModel implements TModel {
   private recordSamplesUpTo(time: number): void {
     const trace = this.runs.currentTrace;
     const sign = this.arrowDownTrackProperty.value ? 1 : -1;
-    const period = SAMPLE_PERIOD_MS / LAB_MODEL_SETTINGS.MILLISECONDS_PER_SECOND;
+    const period = SAMPLE_PERIOD_MS / ACQUISITION_UNITS.MILLISECONDS_PER_SECOND;
     while (this.nextSampleTime <= time + LAB_MODEL_SETTINGS.SAMPLE_TIME_EPSILON) {
       const x = sign * (this.trackPositionProperty.value - this.releasePosition);
       trace.addSample(this.nextSampleTime, quantize(x, ENCODER_RESOLUTION));
@@ -265,7 +266,7 @@ export class LabModel implements TModel {
       return;
     }
     const params = this.trackParameters;
-    const period = SAMPLE_PERIOD_MS / LAB_MODEL_SETTINGS.MILLISECONDS_PER_SECOND;
+    const period = SAMPLE_PERIOD_MS / ACQUISITION_UNITS.MILLISECONDS_PER_SECOND;
     let remaining = dt;
     while (remaining > LAB_MODEL_SETTINGS.REMAINING_TIME_EPSILON && this.runStateProperty.value === RunState.RUNNING) {
       // Never step past the next sample instant, so samples land on the right positions.
@@ -307,7 +308,7 @@ export class LabModel implements TModel {
 
   /** One sample period forward (the time control's step button). */
   public stepOnce(): void {
-    this.advance(SAMPLE_PERIOD_MS / LAB_MODEL_SETTINGS.MILLISECONDS_PER_SECOND);
+    this.advance(SAMPLE_PERIOD_MS / ACQUISITION_UNITS.MILLISECONDS_PER_SECOND);
     this.runs.flush();
   }
 

@@ -23,7 +23,7 @@ import { BackwardAccelerationPanel } from "../../common/BackwardAccelerationPane
 import { StringManager } from "../../i18n/StringManager.js";
 import type { SmartCartModel } from "../model/SmartCartModel.js";
 
-const FONT = new PhetFont(RECORDING_PANEL_SETTINGS.FONT_FONT_SIZE);
+const FONT = new PhetFont(RECORDING_PANEL_SETTINGS.FONT_SIZE);
 const BUTTON_FONT = new PhetFont({ size: RECORDING_PANEL_SETTINGS.BUTTON_FONT_SIZE, weight: "bold" });
 
 export class RecordingPanel extends BackwardAccelerationPanel {

@@ -21,7 +21,7 @@ import { SketchLayer } from "../model/PredictionSketch.js";
 import type { RunLibrary } from "../model/RunLibrary.js";
 
 const TITLE_FONT = new PhetFont({ size: PREDICTIONS_PANEL_SETTINGS.TITLE_FONT_SIZE, weight: "bold" });
-const FONT = new PhetFont(PREDICTIONS_PANEL_SETTINGS.FONT_FONT_SIZE);
+const FONT = new PhetFont(PREDICTIONS_PANEL_SETTINGS.FONT_SIZE);
 
 export class PredictionsPanel extends BackwardAccelerationPanel {
   public readonly focusOrder: readonly Node[];

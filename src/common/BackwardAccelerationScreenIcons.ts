@@ -134,7 +134,7 @@ export function createSmartCartIcon(): ScreenIcon {
     },
   );
   const cartNode = cart(BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_NODE_WIDTH_SEGMENT_2);
-  cartNode.x = BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.X_X;
-  cartNode.y = BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.Y_Y;
+  cartNode.x = BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.SMART_CART_ICON_CART_X;
+  cartNode.y = BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.SMART_CART_ICON_CART_Y;
   return iconFrom(new Node({ children: [background(), axes, velocity, cartNode] }));
 }

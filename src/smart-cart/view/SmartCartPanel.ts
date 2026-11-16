@@ -27,7 +27,7 @@ import backwardAccelerationQueryParameters from "../../preferences/backwardAccel
 import { BluetoothStatus, type BluetoothStatusValue } from "../model/bluetoothSupport.js";
 import { ConnectionState, type SmartCartChannel } from "../model/SmartCartChannel.js";
 
-const FONT = new PhetFont(SMART_CART_PANEL_SETTINGS.FONT_FONT_SIZE);
+const FONT = new PhetFont(SMART_CART_PANEL_SETTINGS.FONT_SIZE);
 
 export class SmartCartPanel extends BackwardAccelerationPanel {
   public readonly focusOrder: readonly Node[];
@@ -124,14 +124,14 @@ export class SmartCartPanel extends BackwardAccelerationPanel {
           }),
           new Text(status, { font: FONT, fill: BackwardAccelerationColors.textColorProperty, maxWidth: innerWidth }),
           new Text(error, {
-            font: new PhetFont(SMART_CART_PANEL_SETTINGS.PHET_FONT_FONT_SIZE),
+            font: new PhetFont(SMART_CART_PANEL_SETTINGS.ERROR_FONT_SIZE),
             fill: BackwardAccelerationColors.warningColorProperty,
             maxWidth: innerWidth,
           }),
           ...(unsupportedMessage
             ? [
                 new RichText(unsupportedMessage, {
-                  font: new PhetFont(SMART_CART_PANEL_SETTINGS.PHET_FONT_FONT_SIZE),
+                  font: new PhetFont(SMART_CART_PANEL_SETTINGS.ERROR_FONT_SIZE),
                   fill: BackwardAccelerationColors.warningColorProperty,
                   lineWrap: innerWidth,
                 }),
@@ -142,7 +142,7 @@ export class SmartCartPanel extends BackwardAccelerationPanel {
           ...(backwardAccelerationQueryParameters.showDiagnostics
             ? [
                 new Text(channel.diagnosticProperty, {
-                  font: new PhetFont(SMART_CART_PANEL_SETTINGS.PHET_FONT_FONT_SIZE_SEGMENT_2),
+                  font: new PhetFont(SMART_CART_PANEL_SETTINGS.DIAGNOSTIC_FONT_SIZE),
                   fill: BackwardAccelerationColors.warningColorProperty,
                   maxWidth: innerWidth,
                 }),

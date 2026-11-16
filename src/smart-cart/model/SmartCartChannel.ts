@@ -1,4 +1,9 @@
-import { SMART_CART_CHANNEL_SETTINGS } from "../../BackwardAccelerationConstants.js";
+import {
+  ACQUISITION_UNITS,
+  HARDWARE_POLL_INTERVAL_MS,
+  SAMPLE_PERIOD_MS,
+  SMART_CART_CHANNEL_SETTINGS,
+} from "../../BackwardAccelerationConstants.js";
 /**
  * SmartCartChannel.ts
  *
@@ -20,7 +25,6 @@ import { SMART_CART_CHANNEL_SETTINGS } from "../../BackwardAccelerationConstants
  */
 
 import { BooleanProperty, NumberProperty, Property } from "scenerystack/axon";
-import { HARDWARE_POLL_INTERVAL_MS, SAMPLE_PERIOD_MS } from "../../BackwardAccelerationConstants.js";
 import BackwardAccelerationNamespace from "../../BackwardAccelerationNamespace.js";
 import { DeviceSelectionCancelled, type TSmartCartDevice } from "./SmartCartDevice.js";
 
@@ -145,8 +149,7 @@ export class SmartCartChannel {
     this.samplesInWindow++;
     const now = this.clock();
     if (now - this.windowStart >= SMART_CART_CHANNEL_SETTINGS.RATE_WINDOW_MS) {
-      this.sampleRate =
-        (SMART_CART_CHANNEL_SETTINGS.MILLISECONDS_PER_SECOND * this.samplesInWindow) / (now - this.windowStart);
+      this.sampleRate = (ACQUISITION_UNITS.MILLISECONDS_PER_SECOND * this.samplesInWindow) / (now - this.windowStart);
       this.windowStart = now;
       this.samplesInWindow = 0;
       const detail = this.device.diagnostic ?? "";
