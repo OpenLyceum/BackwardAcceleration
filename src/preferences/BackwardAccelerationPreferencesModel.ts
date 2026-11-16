@@ -1,3 +1,4 @@
+import { BACKWARD_ACCELERATION_PREFERENCES_MODEL_SETTINGS } from "../BackwardAccelerationConstants.js";
 /**
  * BackwardAccelerationPreferencesModel.ts
  *
@@ -25,12 +26,18 @@ export class BackwardAccelerationPreferencesModel implements SmoothingWindows {
 
   public constructor(tandem?: Tandem) {
     this.velocityWindowProperty = new NumberProperty(backwardAccelerationQueryParameters.velocityWindow, {
-      range: new Range(3, 41),
+      range: new Range(
+        BACKWARD_ACCELERATION_PREFERENCES_MODEL_SETTINGS.VELOCITY_WINDOW_RANGE_MIN,
+        BACKWARD_ACCELERATION_PREFERENCES_MODEL_SETTINGS.VELOCITY_WINDOW_RANGE_MAX,
+      ),
       numberType: "Integer",
       ...(tandem && { tandem: tandem.createTandem("velocityWindowProperty") }),
     });
     this.accelerationWindowProperty = new NumberProperty(backwardAccelerationQueryParameters.accelerationWindow, {
-      range: new Range(3, 41),
+      range: new Range(
+        BACKWARD_ACCELERATION_PREFERENCES_MODEL_SETTINGS.ACCELERATION_WINDOW_RANGE_MIN,
+        BACKWARD_ACCELERATION_PREFERENCES_MODEL_SETTINGS.ACCELERATION_WINDOW_RANGE_MAX,
+      ),
       numberType: "Integer",
       ...(tandem && { tandem: tandem.createTandem("accelerationWindowProperty") }),
     });

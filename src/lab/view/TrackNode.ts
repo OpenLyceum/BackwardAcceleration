@@ -1,3 +1,4 @@
+import { TRACK_NODE_SETTINGS } from "../../BackwardAccelerationConstants.js";
 /**
  * TrackNode.ts
  *
@@ -28,17 +29,17 @@ import { accelerationAt } from "../../common/model/cartPhysics.js";
 import { StringManager } from "../../i18n/StringManager.js";
 import { type LabModel, MAX_CART_POSITION, MIN_CART_POSITION, RunState } from "../model/LabModel.js";
 
-const CART_BODY_HEIGHT = 20;
-const WHEEL_RADIUS = 5;
-const TRACK_THICKNESS = 6;
-const BUMPER_WIDTH = 9;
-const VECTOR_OFFSET = 18; // px above the cart body
-const VECTOR_SPACING = 16;
-const MIN_VECTOR_LENGTH = 1.5; // px; shorter arrows are hidden
-const LABEL_FONT = new PhetFont(12);
+const CART_BODY_HEIGHT: number = TRACK_NODE_SETTINGS.CART_BODY_HEIGHT;
+const WHEEL_RADIUS: number = TRACK_NODE_SETTINGS.WHEEL_RADIUS;
+const TRACK_THICKNESS: number = TRACK_NODE_SETTINGS.TRACK_THICKNESS;
+const BUMPER_WIDTH: number = TRACK_NODE_SETTINGS.BUMPER_WIDTH;
+const VECTOR_OFFSET: number = TRACK_NODE_SETTINGS.VECTOR_OFFSET; // px above the cart body
+const VECTOR_SPACING: number = TRACK_NODE_SETTINGS.VECTOR_SPACING;
+const MIN_VECTOR_LENGTH: number = TRACK_NODE_SETTINGS.MIN_VECTOR_LENGTH; // px; shorter arrows are hidden
+const LABEL_FONT = new PhetFont(TRACK_NODE_SETTINGS.LABEL_FONT_SIZE);
 
 /** Keyboard step for moving the cart, in px (≈ 1.4 cm). */
-const CART_DRAG_DELTA = 6;
+const CART_DRAG_DELTA: number = TRACK_NODE_SETTINGS.CART_DRAG_DELTA;
 
 export class TrackNode extends Node {
   /** The draggable cart, for pdomOrder. */
@@ -60,59 +61,67 @@ export class TrackNode extends Node {
     const pointAt = (s: number) => highEnd().plus(trackDirection().timesScalar(s * scale));
 
     // ── Bench, feet, track, bumper ──────────────────────────────────────────────
-    const bench = new Line(-20, TRACK_THICKNESS, lowEnd.x + 10, TRACK_THICKNESS, {
+    const bench = new Line(TRACK_NODE_SETTINGS.BENCH_START_X, TRACK_THICKNESS, lowEnd.x + 10, TRACK_THICKNESS, {
       stroke: BackwardAccelerationColors.trackFeetColorProperty,
-      lineWidth: 2,
+      lineWidth: TRACK_NODE_SETTINGS.BENCH_LINE_WIDTH,
     });
-    const feet = new Rectangle(0, 0, 14, 0, { fill: BackwardAccelerationColors.trackFeetColorProperty });
+    const feet = new Rectangle(0, 0, TRACK_NODE_SETTINGS.FEET_WIDTH, 0, {
+      fill: BackwardAccelerationColors.trackFeetColorProperty,
+    });
     const heightLabel = new Text("", { font: LABEL_FONT, fill: BackwardAccelerationColors.textColorProperty });
     const track = new Path(null, { fill: BackwardAccelerationColors.trackColorProperty });
-    const bumper = new Rectangle(0, -14, BUMPER_WIDTH, 14, {
+    const bumper = new Rectangle(0, TRACK_NODE_SETTINGS.BUMPER_Y, BUMPER_WIDTH, TRACK_NODE_SETTINGS.BUMPER_HEIGHT, {
       fill: BackwardAccelerationColors.bumperColorProperty,
-      cornerRadius: 2,
+      cornerRadius: TRACK_NODE_SETTINGS.BUMPER_CORNER_RADIUS,
     });
 
     // ── Cart (drawn level; rotated with the track) ───────────────────────────────
     const half = (CART_LENGTH * scale) / 2;
     const body = new Rectangle(-half, -CART_BODY_HEIGHT - WHEEL_RADIUS, 2 * half, CART_BODY_HEIGHT, {
       fill: BackwardAccelerationColors.cartBodyColorProperty,
-      cornerRadius: 4,
+      cornerRadius: TRACK_NODE_SETTINGS.BODY_CORNER_RADIUS,
     });
     const wheels = [-half + 10, half - 10].map(
       (x) => new Circle(WHEEL_RADIUS, { x, y: -WHEEL_RADIUS, fill: BackwardAccelerationColors.cartWheelColorProperty }),
     );
     const plusXArrow = new ArrowNode(-half + 12, 0, half - 22, 0, {
       y: -WHEEL_RADIUS - CART_BODY_HEIGHT / 2,
-      headHeight: 7,
-      headWidth: 9,
-      tailWidth: 2.5,
+      headHeight: TRACK_NODE_SETTINGS.PLUS_X_ARROW_HEAD_HEIGHT,
+      headWidth: TRACK_NODE_SETTINGS.PLUS_X_ARROW_HEAD_WIDTH,
+      tailWidth: TRACK_NODE_SETTINGS.PLUS_X_ARROW_TAIL_WIDTH,
       fill: BackwardAccelerationColors.cartArrowColorProperty,
       stroke: null,
     });
     const plusXLabel = new Text(labels.plusXStringProperty, {
-      font: new PhetFont({ size: 11, weight: "bold" }),
+      font: new PhetFont({ size: TRACK_NODE_SETTINGS.PLUS_X_LABEL_FONT_SIZE, weight: "bold" }),
       fill: BackwardAccelerationColors.cartArrowColorProperty,
       centerY: -WHEEL_RADIUS - CART_BODY_HEIGHT / 2,
-      maxWidth: 20,
+      maxWidth: TRACK_NODE_SETTINGS.PLUS_X_LABEL_MAX_WIDTH,
     });
     // The tape brake: a strip under the body, rubbing on the track between the wheels.
-    const brake = new Rectangle(-half + 16, -3, 2 * half - 32, 3, {
-      fill: BackwardAccelerationColors.brakeColorProperty,
-    });
+    const brake = new Rectangle(
+      -half + 16,
+      TRACK_NODE_SETTINGS.BRAKE_Y,
+      2 * half - 32,
+      TRACK_NODE_SETTINGS.BRAKE_HEIGHT,
+      {
+        fill: BackwardAccelerationColors.brakeColorProperty,
+      },
+    );
 
     const velocityArrow = new ArrowNode(0, 0, 1, 0, {
       y: -WHEEL_RADIUS - CART_BODY_HEIGHT - VECTOR_OFFSET - VECTOR_SPACING,
-      headHeight: 10,
-      headWidth: 12,
-      tailWidth: 5,
+      headHeight: TRACK_NODE_SETTINGS.VELOCITY_ARROW_HEAD_HEIGHT,
+      headWidth: TRACK_NODE_SETTINGS.VELOCITY_ARROW_HEAD_WIDTH,
+      tailWidth: TRACK_NODE_SETTINGS.VELOCITY_ARROW_TAIL_WIDTH,
       fill: BackwardAccelerationColors.velocityVectorColorProperty,
       stroke: null,
     });
     const accelerationArrow = new ArrowNode(0, 0, 1, 0, {
       y: -WHEEL_RADIUS - CART_BODY_HEIGHT - VECTOR_OFFSET,
-      headHeight: 10,
-      headWidth: 12,
-      tailWidth: 5,
+      headHeight: TRACK_NODE_SETTINGS.ACCELERATION_ARROW_HEAD_HEIGHT,
+      headWidth: TRACK_NODE_SETTINGS.ACCELERATION_ARROW_HEAD_WIDTH,
+      tailWidth: TRACK_NODE_SETTINGS.ACCELERATION_ARROW_TAIL_WIDTH,
       fill: BackwardAccelerationColors.accelerationVectorColorProperty,
       stroke: null,
     });
@@ -122,9 +131,9 @@ export class TrackNode extends Node {
       fill: typeof BackwardAccelerationColors.velocityVectorColorProperty,
     ) =>
       new Text(text, {
-        font: new PhetFont({ size: 13, style: "italic", weight: "bold" }),
+        font: new PhetFont({ size: TRACK_NODE_SETTINGS.VECTOR_LABEL_FONT_SIZE, style: "italic", weight: "bold" }),
         fill,
-        right: -half - 6,
+        right: -half - TRACK_NODE_SETTINGS.VECTOR_LABEL_RIGHT_OFFSET,
         centerY: arrow.y,
       });
     const vLabel = vectorLabel("v", velocityArrow, BackwardAccelerationColors.velocityVectorColorProperty);
@@ -132,9 +141,9 @@ export class TrackNode extends Node {
     /** Puts a vector's label just beyond its tip. */
     const placeLabel = (label: Text, length: number) => {
       if (length >= 0) {
-        label.left = length + 4;
+        label.left = length + TRACK_NODE_SETTINGS.PLACE_LABEL_LEFT_OFFSET;
       } else {
-        label.right = length - 4;
+        label.right = length - TRACK_NODE_SETTINGS.PLACE_LABEL_RIGHT_OFFSET;
       }
     };
 
@@ -151,7 +160,12 @@ export class TrackNode extends Node {
     this.children = [bench, feet, heightLabel, track, bumper, cart];
 
     // Fixed bounds (room for the highest feet and the vectors), so layout does not jump as the incline changes.
-    this.localBounds = new Bounds2(-70, -MAX_INCLINE_HEIGHT * scale - 90, lowEnd.x + 10, TRACK_THICKNESS + 2);
+    this.localBounds = new Bounds2(
+      TRACK_NODE_SETTINGS.LOCAL_BOUNDS_MIN_X,
+      -MAX_INCLINE_HEIGHT * scale - 90,
+      lowEnd.x + 10,
+      TRACK_THICKNESS + 2,
+    );
 
     // ── Geometry updates ────────────────────────────────────────────────────────
     const updateTrack = () => {
@@ -175,7 +189,7 @@ export class TrackNode extends Node {
         "{{value}}",
         (model.inclineHeightProperty.value * 100).toFixed(1).replace(/\.0$/, ""),
       );
-      heightLabel.right = high.x - 4;
+      heightLabel.right = high.x - TRACK_NODE_SETTINGS.UPDATE_TRACK_RIGHT_OFFSET;
       heightLabel.centerY = high.y + feetHeight / 2;
     };
 
@@ -185,7 +199,9 @@ export class TrackNode extends Node {
       cart.translation = pointAt(model.trackPositionProperty.value);
       const down = model.arrowDownTrackProperty.value;
       plusXArrow.setTailAndTip(down ? -half + 12 : half - 12, 0, down ? half - 22 : -half + 22, 0);
-      plusXLabel.centerX = down ? half - 14 : -half + 14;
+      plusXLabel.centerX = down
+        ? half - TRACK_NODE_SETTINGS.UPDATE_CART_CENTER_X_OFFSET
+        : -half + TRACK_NODE_SETTINGS.UPDATE_CART_CENTER_X_OFFSET;
       brake.visible = model.brakeProperty.value;
 
       const running = model.runStateProperty.value === RunState.RUNNING;

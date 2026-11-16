@@ -1,3 +1,4 @@
+import { SMART_CART_SCREEN_VIEW_SETTINGS } from "../../BackwardAccelerationConstants.js";
 /**
  * SmartCartScreenView.ts
  *
@@ -27,7 +28,7 @@ import { SmartCartScreenSummaryContent } from "./SmartCartScreenSummaryContent.j
 
 export type SmartCartScreenViewOptions = ScreenViewOptions;
 
-const COLUMN_SPACING = 10;
+const COLUMN_SPACING: number = SMART_CART_SCREEN_VIEW_SETTINGS.COLUMN_SPACING;
 
 export class SmartCartScreenView extends ScreenView {
   public constructor(model: SmartCartModel, providedOptions?: SmartCartScreenViewOptions) {

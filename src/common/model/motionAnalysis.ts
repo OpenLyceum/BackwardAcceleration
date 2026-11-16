@@ -1,3 +1,4 @@
+import { MOTION_ANALYSIS_SETTINGS } from "../../BackwardAccelerationConstants.js";
 /**
  * motionAnalysis.ts
  *
@@ -27,13 +28,13 @@ import { type ExperimentPreset, LaunchMode } from "./Experiment.js";
 import { median } from "./kinematics.js";
 
 /** A speed this far below its running peak (m/s) marks the end of a push: the hand has let go. */
-const PEAK_DROP = 0.02;
+const PEAK_DROP: number = MOTION_ANALYSIS_SETTINGS.PEAK_DROP;
 
 /**
  * Slowing faster than this (m/s²) is a hand or the bumper, not the track: the
  * tape brake gives about 1 m/s² and gravity on the steepest incline under 1 m/s².
  */
-const ABRUPT_DECELERATION = 4;
+const ABRUPT_DECELERATION: number = MOTION_ANALYSIS_SETTINGS.ABRUPT_DECELERATION;
 
 export type RunWindow = {
   /** Index of the first sample to keep. */
@@ -73,7 +74,10 @@ function runEnd(times: readonly number[], velocities: readonly number[], from: n
     if (slowingRate(times, velocities, i) > ABRUPT_DECELERATION) {
       // Back up to where the abrupt slowing began.
       let j = i - 1;
-      while (j > from && slowingRate(times, velocities, j) > ABRUPT_DECELERATION / 4) {
+      while (
+        j > from &&
+        slowingRate(times, velocities, j) > ABRUPT_DECELERATION / MOTION_ANALYSIS_SETTINGS.CATCH_HYSTERESIS_DIVISOR
+      ) {
         j--;
       }
       return j;
@@ -100,7 +104,10 @@ export function findRunWindow(
   let start: number;
   if (preset.launchMode === LaunchMode.RELEASE) {
     start = onset;
-    while (start > 0 && speedAt(velocities, start - 1) > MOTION_THRESHOLD / 3) {
+    while (
+      start > 0 &&
+      speedAt(velocities, start - 1) > MOTION_THRESHOLD / MOTION_ANALYSIS_SETTINGS.RELEASE_HYSTERESIS_DIVISOR
+    ) {
       start--;
     }
   } else {
@@ -160,17 +167,17 @@ export function phaseSigns(
   reverses: boolean,
 ): PhaseSigns | null {
   const n = Math.min(velocities.length, accelerations.length);
-  if (n < 9) {
+  if (n < MOTION_ANALYSIS_SETTINGS.MIN_PHASE_SAMPLES) {
     return null;
   }
   let ranges: [number, number][];
   if (reverses) {
-    const firstSign = Math.sign(median(velocities.slice(0, 3)));
+    const firstSign = Math.sign(median(velocities.slice(0, MOTION_ANALYSIS_SETTINGS.INITIAL_SIGN_SAMPLES)));
     const turn = velocities.findIndex((v) => Math.sign(v) !== firstSign);
-    if (turn <= 2 || turn >= n - 3) {
+    if (turn <= 2 || turn >= n - MOTION_ANALYSIS_SETTINGS.TURN_END_MARGIN) {
       return null;
     }
-    const margin = Math.max(1, Math.floor(n / 20));
+    const margin = Math.max(1, Math.floor(n / MOTION_ANALYSIS_SETTINGS.PHASE_MARGIN_DIVISOR));
     ranges = [
       [0, Math.max(1, turn - margin)],
       [turn - 1, turn + 1],

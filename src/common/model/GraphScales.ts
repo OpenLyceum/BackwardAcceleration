@@ -1,3 +1,4 @@
+import { GRAPH_SCALES_SETTINGS } from "../../BackwardAccelerationConstants.js";
 /**
  * GraphScales.ts
  *
@@ -41,9 +42,9 @@ const ACCELERATION_LEVELS: readonly ZoomLevel[] = [
   { max: 5, step: 1 },
 ];
 
-const DEFAULT_TIME_LEVEL = 2; // 5 s
-const DEFAULT_VALUE_LEVEL = 2; // ±1
-const BRAKE_ACCELERATION_LEVEL = 3; // ±2 m/s²
+const DEFAULT_TIME_LEVEL: number = GRAPH_SCALES_SETTINGS.DEFAULT_TIME_LEVEL; // 5 s
+const DEFAULT_VALUE_LEVEL: number = GRAPH_SCALES_SETTINGS.DEFAULT_VALUE_LEVEL; // ±1
+const BRAKE_ACCELERATION_LEVEL: number = GRAPH_SCALES_SETTINGS.BRAKE_ACCELERATION_LEVEL; // ±2 m/s²
 
 function levelProperty(levels: readonly ZoomLevel[], initial: number): NumberProperty {
   return new NumberProperty(initial, { range: new Range(0, levels.length - 1), numberType: "Integer" });

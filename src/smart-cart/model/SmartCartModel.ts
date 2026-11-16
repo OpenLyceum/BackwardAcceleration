@@ -1,3 +1,4 @@
+import { ACQUISITION_UNITS } from "../../BackwardAccelerationConstants.js";
 /**
  * SmartCartModel.ts
  *
@@ -80,7 +81,7 @@ export class SmartCartModel implements TModel {
     if (!this.isRecordingWritable.value) {
       return;
     }
-    const time = (sample.timeMs - this.startTimeMs) / 1000;
+    const time = (sample.timeMs - this.startTimeMs) / ACQUISITION_UNITS.MILLISECONDS_PER_SECOND;
     if (time < 0) {
       return;
     }

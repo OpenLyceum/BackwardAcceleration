@@ -1,3 +1,4 @@
+import { PREDICTION_SKETCH_SETTINGS } from "../../BackwardAccelerationConstants.js";
 /**
  * PredictionSketch.ts
  *
@@ -26,7 +27,7 @@ export const SketchLayer = {
 export type SketchLayerValue = (typeof SketchLayer)[keyof typeof SketchLayer];
 
 /** Points closer than this, in model units of time (s), are merged while drawing. */
-const MIN_POINT_SPACING = 1e-3;
+const MIN_POINT_SPACING: number = PREDICTION_SKETCH_SETTINGS.MIN_POINT_SPACING;
 
 export type Stroke = readonly Vector2[];
 

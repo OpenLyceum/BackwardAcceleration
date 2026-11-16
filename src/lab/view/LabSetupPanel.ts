@@ -1,3 +1,4 @@
+import { LAB_SETUP_PANEL_SETTINGS } from "../../BackwardAccelerationConstants.js";
 /**
  * LabSetupPanel.ts
  *
@@ -28,9 +29,9 @@ import { LaunchMode, type LaunchModeValue } from "../../common/model/Experiment.
 import { StringManager } from "../../i18n/StringManager.js";
 import type { LabModel } from "../model/LabModel.js";
 
-const TITLE_FONT = new PhetFont({ size: 14, weight: "bold" });
-const LABEL_FONT = new PhetFont(12);
-const CM_PER_M = 100;
+const TITLE_FONT = new PhetFont({ size: LAB_SETUP_PANEL_SETTINGS.TITLE_FONT_SIZE, weight: "bold" });
+const LABEL_FONT = new PhetFont(LAB_SETUP_PANEL_SETTINGS.LABEL_FONT_SIZE);
+const CM_PER_M: number = LAB_SETUP_PANEL_SETTINGS.CM_PER_M;
 
 export class LabSetupPanel extends BackwardAccelerationPanel {
   public readonly focusOrder: readonly Node[];
@@ -70,7 +71,11 @@ export class LabSetupPanel extends BackwardAccelerationPanel {
       {
         ...BACKWARD_ACCELERATION_NUMBER_CONTROL_OPTIONS,
         delta: 1,
-        titleNodeOptions: { font: LABEL_FONT, fill, maxWidth: innerWidth - 70 },
+        titleNodeOptions: {
+          font: LABEL_FONT,
+          fill,
+          maxWidth: innerWidth - LAB_SETUP_PANEL_SETTINGS.HEIGHT_CONTROL_MAX_WIDTH_OFFSET,
+        },
         numberDisplayOptions: {
           valuePattern: labels.centimetresPatternStringProperty,
           decimalPlaces: 0,
@@ -92,7 +97,11 @@ export class LabSetupPanel extends BackwardAccelerationPanel {
       accessibleName: a11y.brakeStringProperty,
     });
 
-    const radioOptions = { orientation: "vertical" as const, spacing: 4, radioButtonOptions: { radius: 7 } };
+    const radioOptions = {
+      orientation: "vertical" as const,
+      spacing: LAB_SETUP_PANEL_SETTINGS.RADIO_OPTIONS_SPACING,
+      radioButtonOptions: { radius: LAB_SETUP_PANEL_SETTINGS.RADIO_OPTIONS_RADIUS },
+    };
 
     const arrowGroup = new AquaRadioButtonGroup<boolean>(
       model.arrowDownTrackProperty,
@@ -121,17 +130,23 @@ export class LabSetupPanel extends BackwardAccelerationPanel {
     const pushDirectionGroup = new AquaRadioButtonGroup<boolean>(
       model.pushTowardPlusXProperty,
       [
-        { value: true, createNode: () => text(labels.towardPlusXStringProperty, 30), tandemName: "plusXRadioButton" },
+        {
+          value: true,
+          createNode: () =>
+            text(labels.towardPlusXStringProperty, LAB_SETUP_PANEL_SETTINGS.TOWARD_PLUS_X_TEXT_MAX_WIDTH),
+          tandemName: "plusXRadioButton",
+        },
         {
           value: false,
-          createNode: () => text(labels.towardMinusXStringProperty, 30),
+          createNode: () =>
+            text(labels.towardMinusXStringProperty, LAB_SETUP_PANEL_SETTINGS.TOWARD_MINUS_X_TEXT_MAX_WIDTH),
           tandemName: "minusXRadioButton",
         },
       ],
       {
         orientation: "horizontal",
-        spacing: 12,
-        radioButtonOptions: { radius: 7 },
+        spacing: LAB_SETUP_PANEL_SETTINGS.PUSH_DIRECTION_GROUP_SPACING,
+        radioButtonOptions: { radius: LAB_SETUP_PANEL_SETTINGS.PUSH_DIRECTION_GROUP_RADIUS },
         enabledProperty: pushEnabledProperty,
         accessibleName: a11y.pushDirectionStringProperty,
       },
@@ -143,17 +158,21 @@ export class LabSetupPanel extends BackwardAccelerationPanel {
       new Range(MIN_PUSH_SPEED, MAX_PUSH_SPEED),
       {
         ...BACKWARD_ACCELERATION_NUMBER_CONTROL_OPTIONS,
-        delta: 0.05,
+        delta: LAB_SETUP_PANEL_SETTINGS.PUSH_SPEED_CONTROL_DELTA,
         enabledProperty: pushEnabledProperty,
-        titleNodeOptions: { font: LABEL_FONT, fill, maxWidth: innerWidth - 80 },
+        titleNodeOptions: {
+          font: LABEL_FONT,
+          fill,
+          maxWidth: innerWidth - LAB_SETUP_PANEL_SETTINGS.PUSH_SPEED_CONTROL_MAX_WIDTH_OFFSET,
+        },
         numberDisplayOptions: {
           valuePattern: labels.speedPatternStringProperty,
-          decimalPlaces: 2,
+          decimalPlaces: LAB_SETUP_PANEL_SETTINGS.PUSH_SPEED_CONTROL_DECIMAL_PLACES,
           textOptions: { font: LABEL_FONT },
         },
         sliderOptions: {
           ...BACKWARD_ACCELERATION_NUMBER_CONTROL_OPTIONS.sliderOptions,
-          keyboardStep: 0.05,
+          keyboardStep: LAB_SETUP_PANEL_SETTINGS.PUSH_SPEED_CONTROL_KEYBOARD_STEP,
           constrainValue: (value: number) => Math.round(value * 20) / 20,
         },
         accessibleName: a11y.pushSpeedStringProperty,
@@ -165,7 +184,7 @@ export class LabSetupPanel extends BackwardAccelerationPanel {
       new Text(labels.velocityVectorStringProperty, {
         font: LABEL_FONT,
         fill: BackwardAccelerationColors.velocityVectorColorProperty,
-        maxWidth: innerWidth - 28,
+        maxWidth: innerWidth - LAB_SETUP_PANEL_SETTINGS.VELOCITY_VECTOR_CHECKBOX_MAX_WIDTH_OFFSET,
       }),
       BACKWARD_ACCELERATION_CHECKBOX_OPTIONS,
     );
@@ -174,18 +193,22 @@ export class LabSetupPanel extends BackwardAccelerationPanel {
       new Text(labels.accelerationVectorStringProperty, {
         font: LABEL_FONT,
         fill: BackwardAccelerationColors.accelerationVectorColorProperty,
-        maxWidth: innerWidth - 28,
+        maxWidth: innerWidth - LAB_SETUP_PANEL_SETTINGS.ACCELERATION_VECTOR_CHECKBOX_MAX_WIDTH_OFFSET,
       }),
       BACKWARD_ACCELERATION_CHECKBOX_OPTIONS,
     );
 
     const heading = (property: typeof labels.arrowDirectionStringProperty) =>
-      new Text(property, { font: new PhetFont({ size: 12, weight: "bold" }), fill, maxWidth: innerWidth });
+      new Text(property, {
+        font: new PhetFont({ size: LAB_SETUP_PANEL_SETTINGS.HEADING_FONT_SIZE, weight: "bold" }),
+        fill,
+        maxWidth: innerWidth,
+      });
 
     super(
       new VBox({
         align: "left",
-        spacing: 6,
+        spacing: LAB_SETUP_PANEL_SETTINGS.CONSTRUCTOR_SPACING,
         children: [
           new Text(labels.setUpStringProperty, { font: TITLE_FONT, fill, maxWidth: innerWidth }),
           heightControl,
@@ -195,7 +218,7 @@ export class LabSetupPanel extends BackwardAccelerationPanel {
           heading(labels.startStringProperty),
           launchGroup,
           new HBox({
-            spacing: 8,
+            spacing: LAB_SETUP_PANEL_SETTINGS.ITEM_8_SPACING,
             children: [text(labels.pushTowardStringProperty, innerWidth - 90), pushDirectionGroup],
           }),
           pushSpeedControl,

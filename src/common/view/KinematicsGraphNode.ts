@@ -1,3 +1,4 @@
+import { KINEMATICS_GRAPH_NODE_SETTINGS } from "../../BackwardAccelerationConstants.js";
 /**
  * KinematicsGraphNode.ts
  *
@@ -41,22 +42,22 @@ import { Quantity, type QuantityValue, SketchLayer, type Stroke } from "../model
 import type { RunLibrary } from "../model/RunLibrary.js";
 import type { MotionSeries } from "../model/Trace.js";
 
-const LEFT_INSET = 52; // axis title + tick labels
-const BOTTOM_INSET = 30; // tick labels + axis title
-const TOP_INSET = 6;
-const RIGHT_INSET = 8;
+const LEFT_INSET: number = KINEMATICS_GRAPH_NODE_SETTINGS.LEFT_INSET; // axis title + tick labels
+const BOTTOM_INSET: number = KINEMATICS_GRAPH_NODE_SETTINGS.BOTTOM_INSET; // tick labels + axis title
+const TOP_INSET: number = KINEMATICS_GRAPH_NODE_SETTINGS.TOP_INSET;
+const RIGHT_INSET: number = KINEMATICS_GRAPH_NODE_SETTINGS.RIGHT_INSET;
 
-const TICK_FONT = new PhetFont(10);
-const AXIS_TITLE_FONT = new PhetFont(12);
+const TICK_FONT = new PhetFont(KINEMATICS_GRAPH_NODE_SETTINGS.TICK_FONT_SIZE);
+const AXIS_TITLE_FONT = new PhetFont(KINEMATICS_GRAPH_NODE_SETTINGS.AXIS_TITLE_FONT_SIZE);
 
-const MEASURED_LINE_WIDTH = 2.5;
-const OTHER_RUN_LINE_WIDTH = 1.5;
-const SKETCH_LINE_WIDTH = 2.5;
+const MEASURED_LINE_WIDTH: number = KINEMATICS_GRAPH_NODE_SETTINGS.MEASURED_LINE_WIDTH;
+const OTHER_RUN_LINE_WIDTH: number = KINEMATICS_GRAPH_NODE_SETTINGS.OTHER_RUN_LINE_WIDTH;
+const SKETCH_LINE_WIDTH: number = KINEMATICS_GRAPH_NODE_SETTINGS.SKETCH_LINE_WIDTH;
 const INDIVIDUAL_DASH = [9, 5];
 const GROUP_DASH = [2, 4];
 
 /** Keyboard step of a trim marker, in view px (the time per px depends on zoom). */
-const MARKER_DRAG_DELTA = 4;
+const MARKER_DRAG_DELTA: number = KINEMATICS_GRAPH_NODE_SETTINGS.MARKER_DRAG_DELTA;
 
 export type KinematicsGraphNodeOptions = {
   readonly quantity: QuantityValue;
@@ -140,19 +141,27 @@ export class KinematicsGraphNode extends Node {
     });
     this.plotNode = chartRectangle;
 
-    const gridOptions = { stroke: BackwardAccelerationColors.graphGridColorProperty, lineWidth: 0.5 };
+    const gridOptions = {
+      stroke: BackwardAccelerationColors.graphGridColorProperty,
+      lineWidth: KINEMATICS_GRAPH_NODE_SETTINGS.GRID_OPTIONS_LINE_WIDTH,
+    };
     const horizontalGrid = new GridLineSet(chartTransform, Orientation.VERTICAL, valueLevel.step, gridOptions);
     const verticalGrid = new GridLineSet(chartTransform, Orientation.HORIZONTAL, timeLevel.step, gridOptions);
     const zeroAxis = new AxisLine(chartTransform, Orientation.HORIZONTAL, {
       stroke: BackwardAccelerationColors.graphAxisColorProperty,
-      lineWidth: 1.5,
+      lineWidth: KINEMATICS_GRAPH_NODE_SETTINGS.ZERO_AXIS_LINE_WIDTH,
     });
 
     const label = (value: number) =>
-      new Text(Number.isInteger(value) ? value.toString() : value.toFixed(2).replace(/0$/, ""), {
-        font: TICK_FONT,
-        fill: BackwardAccelerationColors.textColorProperty,
-      });
+      new Text(
+        Number.isInteger(value)
+          ? value.toString()
+          : value.toFixed(KINEMATICS_GRAPH_NODE_SETTINGS.LABEL_DECIMAL_PLACES).replace(/0$/, ""),
+        {
+          font: TICK_FONT,
+          fill: BackwardAccelerationColors.textColorProperty,
+        },
+      );
     const yTicks = new TickMarkSet(chartTransform, Orientation.VERTICAL, valueLevel.step, { edge: "min" });
     const yLabels = new TickLabelSet(chartTransform, Orientation.VERTICAL, valueLevel.step, {
       edge: "min",
@@ -238,12 +247,26 @@ export class KinematicsGraphNode extends Node {
           accessibleName,
           accessibleHelpText: options.trimMarkers?.helpText ?? null,
           children: [
-            new Rectangle(-6, 0, 12, viewHeight, { fill: "transparent" }),
-            new Line(0, 0, 0, viewHeight, { stroke: BackwardAccelerationColors.trimHandleColorProperty, lineWidth: 2 }),
-            new Path(Shape.regularPolygon(3, 6).transformed(Matrix3.rotation2(Math.PI / 2)), {
-              fill: BackwardAccelerationColors.trimHandleColorProperty,
-              y: 4,
+            new Rectangle(
+              KINEMATICS_GRAPH_NODE_SETTINGS.CREATE_MARKER_X,
+              0,
+              KINEMATICS_GRAPH_NODE_SETTINGS.CREATE_MARKER_WIDTH,
+              viewHeight,
+              { fill: "transparent" },
+            ),
+            new Line(0, 0, 0, viewHeight, {
+              stroke: BackwardAccelerationColors.trimHandleColorProperty,
+              lineWidth: KINEMATICS_GRAPH_NODE_SETTINGS.CREATE_MARKER_LINE_WIDTH,
             }),
+            new Path(
+              Shape.regularPolygon(3, KINEMATICS_GRAPH_NODE_SETTINGS.CREATE_MARKER_RADIUS).transformed(
+                Matrix3.rotation2(Math.PI / 2),
+              ),
+              {
+                fill: BackwardAccelerationColors.trimHandleColorProperty,
+                y: KINEMATICS_GRAPH_NODE_SETTINGS.CREATE_MARKER_Y,
+              },
+            ),
           ],
         });
       const releaseMarker = createMarker(options.trimMarkers.releaseName);
@@ -373,7 +396,7 @@ export class KinematicsGraphNode extends Node {
           shape.moveToPoint(view);
           // A single click leaves a dot.
           if (stroke.length === 1) {
-            shape.lineToPoint(view.plusXY(0.5, 0));
+            shape.lineToPoint(view.plusXY(KINEMATICS_GRAPH_NODE_SETTINGS.PLUS_XY_X_OFFSET, 0));
           }
         } else {
           shape.lineToPoint(view);

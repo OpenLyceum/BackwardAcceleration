@@ -1,3 +1,4 @@
+import { GRAPH_AREA_SETTINGS } from "../../BackwardAccelerationConstants.js";
 /**
  * GraphArea.ts
  *
@@ -20,8 +21,8 @@ import { Quantity } from "../model/PredictionSketch.js";
 import type { RunLibrary } from "../model/RunLibrary.js";
 import { KinematicsGraphNode } from "./KinematicsGraphNode.js";
 
-const LEGEND_FONT = new PhetFont(12);
-const LEGEND_LINE_LENGTH = 28;
+const LEGEND_FONT = new PhetFont(GRAPH_AREA_SETTINGS.LEGEND_FONT_SIZE);
+const LEGEND_LINE_LENGTH: number = GRAPH_AREA_SETTINGS.LEGEND_LINE_LENGTH;
 
 export type GraphAreaOptions = {
   /** Smart Cart screen: release / catch markers on the full recording. */
@@ -76,7 +77,7 @@ export class GraphArea extends VBox {
     ) =>
       new PlusMinusZoomButtonGroup(property, {
         orientation,
-        spacing: 4,
+        spacing: GRAPH_AREA_SETTINGS.ZOOM_GROUP_SPACING,
         applyZoomIn: (level: number) => level - 1,
         applyZoomOut: (level: number) => level + 1,
         buttonOptions: FLAT_BUTTON_APPEARANCE_OPTIONS,
@@ -109,14 +110,22 @@ export class GraphArea extends VBox {
       lineDash: number[],
     ) =>
       new HBox({
-        spacing: 5,
+        spacing: GRAPH_AREA_SETTINGS.LEGEND_ITEM_SPACING,
         children: [
-          new Line(0, 0, LEGEND_LINE_LENGTH, 0, { stroke, lineWidth: 2.5, lineDash }),
-          new Text(label, { font: LEGEND_FONT, fill: BackwardAccelerationColors.textColorProperty, maxWidth: 120 }),
+          new Line(0, 0, LEGEND_LINE_LENGTH, 0, {
+            stroke,
+            lineWidth: GRAPH_AREA_SETTINGS.LEGEND_ITEM_LINE_WIDTH,
+            lineDash,
+          }),
+          new Text(label, {
+            font: LEGEND_FONT,
+            fill: BackwardAccelerationColors.textColorProperty,
+            maxWidth: GRAPH_AREA_SETTINGS.LEGEND_ITEM_MAX_WIDTH,
+          }),
         ],
       });
     const legend = new HBox({
-      spacing: 16,
+      spacing: GRAPH_AREA_SETTINGS.LEGEND_SPACING,
       children: [
         legendItem(labels.measuredStringProperty, BackwardAccelerationColors.measuredColorProperty, []),
         legendItem(
@@ -133,9 +142,17 @@ export class GraphArea extends VBox {
       spacing: GRAPH_SPACING,
       align: "right",
       children: [
-        new HBox({ spacing: 6, align: "center", children: [velocityGraph, velocityZoom] }),
-        new HBox({ spacing: 6, align: "center", children: [accelerationGraph, accelerationZoom] }),
-        new HBox({ spacing: 20, children: [legend, timeZoom] }),
+        new HBox({
+          spacing: GRAPH_AREA_SETTINGS.CONSTRUCTOR_SPACING,
+          align: "center",
+          children: [velocityGraph, velocityZoom],
+        }),
+        new HBox({
+          spacing: GRAPH_AREA_SETTINGS.CONSTRUCTOR_SPACING,
+          align: "center",
+          children: [accelerationGraph, accelerationZoom],
+        }),
+        new HBox({ spacing: GRAPH_AREA_SETTINGS.ITEM_3_SPACING, children: [legend, timeZoom] }),
       ],
     });
 

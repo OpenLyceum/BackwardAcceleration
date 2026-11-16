@@ -12,6 +12,7 @@ import { Circle, Line, Node, Path, Rectangle } from "scenerystack/scenery";
 import { ArrowNode } from "scenerystack/scenery-phet";
 import { ScreenIcon } from "scenerystack/sim";
 import BackwardAccelerationColors from "../BackwardAccelerationColors.js";
+import { BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS } from "../BackwardAccelerationConstants.js";
 
 const W = 548;
 const H = 373;
@@ -36,10 +37,18 @@ function cart(width: number): Node {
     children: [
       new Rectangle(-width / 2, -height - wheel, width, height, {
         fill: BackwardAccelerationColors.cartBodyColorProperty,
-        cornerRadius: 8,
+        cornerRadius: BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_CORNER_RADIUS,
       }),
-      new Circle(wheel, { x: -width * 0.32, y: -wheel, fill: BackwardAccelerationColors.cartWheelColorProperty }),
-      new Circle(wheel, { x: width * 0.32, y: -wheel, fill: BackwardAccelerationColors.cartWheelColorProperty }),
+      new Circle(wheel, {
+        x: -width * BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_X_FACTOR,
+        y: -wheel,
+        fill: BackwardAccelerationColors.cartWheelColorProperty,
+      }),
+      new Circle(wheel, {
+        x: width * BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_X_FACTOR,
+        y: -wheel,
+        fill: BackwardAccelerationColors.cartWheelColorProperty,
+      }),
     ],
   });
 }
@@ -48,49 +57,84 @@ export function createLabIcon(): ScreenIcon {
   const slope = 0.22;
   const track = new Path(
     new Shape()
-      .moveTo(40, 260)
-      .lineTo(508, 260 + 468 * slope)
-      .lineTo(508, 260 + 468 * slope + 14)
-      .lineTo(40, 274)
+      .moveTo(BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.TRACK_X, BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.TRACK_Y)
+      .lineTo(BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.TRACK_X_SEGMENT_2, 260 + 468 * slope)
+      .lineTo(BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.TRACK_X_SEGMENT_2, 260 + 468 * slope + 14)
+      .lineTo(
+        BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.TRACK_X,
+        BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.TRACK_X_LINE_TO_Y,
+      )
       .close(),
     { fill: BackwardAccelerationColors.trackColorProperty },
   );
   const angle = Math.atan(slope);
-  const vectorOptions = { headHeight: 26, headWidth: 34, tailWidth: 13, stroke: null };
+  const vectorOptions = {
+    headHeight: BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.VECTOR_OPTIONS_HEAD_HEIGHT,
+    headWidth: BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.VECTOR_OPTIONS_HEAD_WIDTH,
+    tailWidth: BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.VECTOR_OPTIONS_TAIL_WIDTH,
+    stroke: null,
+  };
   const cartNode = new Node({
-    x: 270,
-    y: 260 + 230 * slope,
+    x: BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_NODE_X,
+    y:
+      BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_NODE_Y_OFFSET +
+      BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_NODE_Y_FACTOR * slope,
     rotation: angle,
     children: [
-      cart(170),
-      new ArrowNode(-20, -95, 110, -95, {
-        ...vectorOptions,
-        fill: BackwardAccelerationColors.velocityVectorColorProperty,
-      }),
-      new ArrowNode(30, -140, -100, -140, {
-        ...vectorOptions,
-        fill: BackwardAccelerationColors.accelerationVectorColorProperty,
-      }),
+      cart(BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_NODE_WIDTH),
+      new ArrowNode(
+        BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_NODE_START_X,
+        BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_NODE_START_Y,
+        BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_NODE_END_X,
+        BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_NODE_END_Y,
+        {
+          ...vectorOptions,
+          fill: BackwardAccelerationColors.velocityVectorColorProperty,
+        },
+      ),
+      new ArrowNode(
+        BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_NODE_START_X_SEGMENT_2,
+        BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_NODE_START_Y_SEGMENT_2,
+        BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_NODE_END_X_SEGMENT_2,
+        BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_NODE_END_Y_SEGMENT_2,
+        {
+          ...vectorOptions,
+          fill: BackwardAccelerationColors.accelerationVectorColorProperty,
+        },
+      ),
     ],
   });
   return iconFrom(new Node({ children: [background(), track, cartNode] }));
 }
 
 export function createSmartCartIcon(): ScreenIcon {
-  const left = 70;
-  const right = 500;
+  const left: number = BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.LEFT;
+  const right: number = BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.RIGHT;
   const axisY = 260;
-  const axes = new Path(new Shape().moveTo(left, 175).lineTo(left, 345).moveTo(left, axisY).lineTo(right, axisY), {
-    stroke: BackwardAccelerationColors.textColorProperty,
-    lineWidth: 4,
-  });
-  const velocity = new Line(left, 185, right - 20, 335, {
-    stroke: BackwardAccelerationColors.measuredColorProperty,
-    lineWidth: 10,
-    lineCap: "round",
-  });
-  const cartNode = cart(190);
-  cartNode.x = 274;
-  cartNode.y = 140;
+  const axes = new Path(
+    new Shape()
+      .moveTo(left, BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.AXES_Y)
+      .lineTo(left, BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.AXES_Y_SEGMENT_2)
+      .moveTo(left, axisY)
+      .lineTo(right, axisY),
+    {
+      stroke: BackwardAccelerationColors.textColorProperty,
+      lineWidth: BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.AXES_LINE_WIDTH,
+    },
+  );
+  const velocity = new Line(
+    left,
+    BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.VELOCITY_START_Y,
+    right - 20,
+    BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.VELOCITY_END_Y,
+    {
+      stroke: BackwardAccelerationColors.measuredColorProperty,
+      lineWidth: BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.VELOCITY_LINE_WIDTH,
+      lineCap: "round",
+    },
+  );
+  const cartNode = cart(BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.CART_NODE_WIDTH_SEGMENT_2);
+  cartNode.x = BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.X_X;
+  cartNode.y = BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS.Y_Y;
   return iconFrom(new Node({ children: [background(), axes, velocity, cartNode] }));
 }

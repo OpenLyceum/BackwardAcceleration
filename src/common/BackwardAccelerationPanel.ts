@@ -1,3 +1,4 @@
+import { BACKWARD_ACCELERATION_PANEL_SETTINGS } from "../BackwardAccelerationConstants.js";
 /**
  * BackwardAccelerationPanel.ts
  *
@@ -40,8 +41,8 @@ export class BackwardAccelerationPanel extends Panel {
         fill: BackwardAccelerationColors.panelBackgroundColorProperty,
         stroke: BackwardAccelerationColors.panelBorderColorProperty,
         cornerRadius: PANEL_CORNER_RADIUS,
-        xMargin: 12,
-        yMargin: 10,
+        xMargin: BACKWARD_ACCELERATION_PANEL_SETTINGS.OPTIONS_X_MARGIN,
+        yMargin: BACKWARD_ACCELERATION_PANEL_SETTINGS.OPTIONS_Y_MARGIN,
       },
       providedOptions,
     );

@@ -1,3 +1,4 @@
+import { LAB_MODEL_SETTINGS } from "../../BackwardAccelerationConstants.js";
 /**
  * LabModel.ts
  *
@@ -66,16 +67,16 @@ export type RunEndValue = (typeof RunEnd)[keyof typeof RunEnd];
 
 /** Lowest and highest positions of the cart's centre, m: half a cart from each end (a bumper block at the low end). */
 export const MIN_CART_POSITION = CART_LENGTH / 2;
-export const MAX_CART_POSITION = TRACK_LENGTH - CART_LENGTH / 2 - 0.02;
+export const MAX_CART_POSITION = TRACK_LENGTH - CART_LENGTH / 2 - LAB_MODEL_SETTINGS.BUMPER_CLEARANCE;
 
 /** A cart at rest this long after being let go has stopped for good. */
-const REST_TIME_TO_FINISH = 0.4;
+const REST_TIME_TO_FINISH: number = LAB_MODEL_SETTINGS.REST_TIME_TO_FINISH;
 
 /** Clock speed in slow motion. */
-const SLOW_MOTION_FACTOR = 0.25;
+const SLOW_MOTION_FACTOR: number = LAB_MODEL_SETTINGS.SLOW_MOTION_FACTOR;
 
 /** Longest frame dt honoured, s (a backgrounded tab must not teleport the cart). */
-const MAX_FRAME_DT = 0.1;
+const MAX_FRAME_DT: number = LAB_MODEL_SETTINGS.MAX_FRAME_DT;
 
 export class LabModel implements TModel {
   public readonly notebook: PredictionNotebook;
@@ -250,8 +251,8 @@ export class LabModel implements TModel {
   private recordSamplesUpTo(time: number): void {
     const trace = this.runs.currentTrace;
     const sign = this.arrowDownTrackProperty.value ? 1 : -1;
-    const period = SAMPLE_PERIOD_MS / 1000;
-    while (this.nextSampleTime <= time + 1e-9) {
+    const period = SAMPLE_PERIOD_MS / LAB_MODEL_SETTINGS.MILLISECONDS_PER_SECOND;
+    while (this.nextSampleTime <= time + LAB_MODEL_SETTINGS.SAMPLE_TIME_EPSILON) {
       const x = sign * (this.trackPositionProperty.value - this.releasePosition);
       trace.addSample(this.nextSampleTime, quantize(x, ENCODER_RESOLUTION));
       this.nextSampleTime += period;
@@ -264,12 +265,16 @@ export class LabModel implements TModel {
       return;
     }
     const params = this.trackParameters;
-    const period = SAMPLE_PERIOD_MS / 1000;
+    const period = SAMPLE_PERIOD_MS / LAB_MODEL_SETTINGS.MILLISECONDS_PER_SECOND;
     let remaining = dt;
-    while (remaining > 1e-12 && this.runStateProperty.value === RunState.RUNNING) {
+    while (remaining > LAB_MODEL_SETTINGS.REMAINING_TIME_EPSILON && this.runStateProperty.value === RunState.RUNNING) {
       // Never step past the next sample instant, so samples land on the right positions.
       const toSample = this.nextSampleTime - this.runTimeProperty.value;
-      const h = Math.min(remaining, PHYSICS_SUBSTEP, toSample > 1e-9 ? toSample : period);
+      const h = Math.min(
+        remaining,
+        PHYSICS_SUBSTEP,
+        toSample > LAB_MODEL_SETTINGS.SAMPLE_TIME_EPSILON ? toSample : period,
+      );
       const next = advanceCart(
         { position: this.trackPositionProperty.value, velocity: this.trackVelocityProperty.value },
         h,
@@ -302,7 +307,7 @@ export class LabModel implements TModel {
 
   /** One sample period forward (the time control's step button). */
   public stepOnce(): void {
-    this.advance(SAMPLE_PERIOD_MS / 1000);
+    this.advance(SAMPLE_PERIOD_MS / LAB_MODEL_SETTINGS.MILLISECONDS_PER_SECOND);
     this.runs.flush();
   }
 

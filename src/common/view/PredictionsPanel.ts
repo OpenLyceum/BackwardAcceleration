@@ -1,3 +1,4 @@
+import { PREDICTIONS_PANEL_SETTINGS } from "../../BackwardAccelerationConstants.js";
 /**
  * PredictionsPanel.ts
  *
@@ -19,8 +20,8 @@ import type { DrawModeValue, PredictionNotebook } from "../model/PredictionNoteb
 import { SketchLayer } from "../model/PredictionSketch.js";
 import type { RunLibrary } from "../model/RunLibrary.js";
 
-const TITLE_FONT = new PhetFont({ size: 14, weight: "bold" });
-const FONT = new PhetFont(12);
+const TITLE_FONT = new PhetFont({ size: PREDICTIONS_PANEL_SETTINGS.TITLE_FONT_SIZE, weight: "bold" });
+const FONT = new PhetFont(PREDICTIONS_PANEL_SETTINGS.FONT_FONT_SIZE);
 
 export class PredictionsPanel extends BackwardAccelerationPanel {
   public readonly focusOrder: readonly Node[];
@@ -49,31 +50,39 @@ export class PredictionsPanel extends BackwardAccelerationPanel {
       ],
       {
         orientation: "vertical",
-        spacing: 5,
-        radioButtonOptions: { radius: 7 },
+        spacing: PREDICTIONS_PANEL_SETTINGS.DRAW_MODE_GROUP_SPACING,
+        radioButtonOptions: { radius: PREDICTIONS_PANEL_SETTINGS.DRAW_MODE_GROUP_RADIUS },
         accessibleName: a11y.drawModeStringProperty,
       },
     );
 
     const showIndividual = new Checkbox(
       notebook.showIndividualProperty,
-      text(labels.showIndividualStringProperty, 90),
+      text(labels.showIndividualStringProperty, PREDICTIONS_PANEL_SETTINGS.SHOW_INDIVIDUAL_TEXT_MAX_WIDTH),
       {
         ...BACKWARD_ACCELERATION_CHECKBOX_OPTIONS,
         checkboxColor: BackwardAccelerationColors.individualPredictionColorProperty,
       },
     );
-    const showGroup = new Checkbox(notebook.showGroupProperty, text(labels.showGroupStringProperty, 90), {
-      ...BACKWARD_ACCELERATION_CHECKBOX_OPTIONS,
-      checkboxColor: BackwardAccelerationColors.groupPredictionColorProperty,
-    });
+    const showGroup = new Checkbox(
+      notebook.showGroupProperty,
+      text(labels.showGroupStringProperty, PREDICTIONS_PANEL_SETTINGS.SHOW_GROUP_TEXT_MAX_WIDTH),
+      {
+        ...BACKWARD_ACCELERATION_CHECKBOX_OPTIONS,
+        checkboxColor: BackwardAccelerationColors.groupPredictionColorProperty,
+      },
+    );
 
     const eraseButton = (label: typeof labels.eraseIndividualStringProperty, listener: () => void) =>
       new RectangularPushButton({
         ...FLAT_PANEL_PUSH_BUTTON_OPTIONS,
-        content: new Text(label, { font: FONT, fill: LIGHT_SURFACE_TEXT_FILL, maxWidth: innerWidth / 2 - 20 }),
-        xMargin: 6,
-        yMargin: 3,
+        content: new Text(label, {
+          font: FONT,
+          fill: LIGHT_SURFACE_TEXT_FILL,
+          maxWidth: innerWidth / 2 - PREDICTIONS_PANEL_SETTINGS.ERASE_BUTTON_MAX_WIDTH_OFFSET,
+        }),
+        xMargin: PREDICTIONS_PANEL_SETTINGS.ERASE_BUTTON_X_MARGIN,
+        yMargin: PREDICTIONS_PANEL_SETTINGS.ERASE_BUTTON_Y_MARGIN,
         listener,
       });
     const eraseIndividual = eraseButton(labels.eraseIndividualStringProperty, () =>
@@ -90,7 +99,7 @@ export class PredictionsPanel extends BackwardAccelerationPanel {
     super(
       new VBox({
         align: "left",
-        spacing: 7,
+        spacing: PREDICTIONS_PANEL_SETTINGS.CONSTRUCTOR_SPACING,
         children: [
           new Text(labels.predictionsStringProperty, {
             font: TITLE_FONT,
@@ -98,8 +107,8 @@ export class PredictionsPanel extends BackwardAccelerationPanel {
             maxWidth: innerWidth,
           }),
           drawModeGroup,
-          new HBox({ spacing: 8, children: [showIndividual, showGroup] }),
-          new HBox({ spacing: 6, children: [eraseIndividual, eraseGroup] }),
+          new HBox({ spacing: PREDICTIONS_PANEL_SETTINGS.ITEM_3_SPACING, children: [showIndividual, showGroup] }),
+          new HBox({ spacing: PREDICTIONS_PANEL_SETTINGS.ITEM_4_SPACING, children: [eraseIndividual, eraseGroup] }),
           showOtherRuns,
         ],
       }),

@@ -1,3 +1,4 @@
+import { EXPERIMENT_PANEL_SETTINGS } from "../../BackwardAccelerationConstants.js";
 /**
  * ExperimentPanel.ts
  *
@@ -20,9 +21,9 @@ import { BackwardAccelerationPanel } from "../BackwardAccelerationPanel.js";
 import { EXPERIMENTS, type ExperimentValue } from "../model/Experiment.js";
 import type { RunLibrary } from "../model/RunLibrary.js";
 
-const TITLE_FONT = new PhetFont({ size: 14, weight: "bold" });
-const ITEM_FONT = new PhetFont(13);
-const INSTRUCTION_FONT = new PhetFont(12);
+const TITLE_FONT = new PhetFont({ size: EXPERIMENT_PANEL_SETTINGS.TITLE_FONT_SIZE, weight: "bold" });
+const ITEM_FONT = new PhetFont(EXPERIMENT_PANEL_SETTINGS.ITEM_FONT_SIZE);
+const INSTRUCTION_FONT = new PhetFont(EXPERIMENT_PANEL_SETTINGS.INSTRUCTION_FONT_SIZE);
 
 export class ExperimentPanel extends BackwardAccelerationPanel {
   public readonly comboBox: ComboBox<ExperimentValue>;
@@ -40,14 +41,18 @@ export class ExperimentPanel extends BackwardAccelerationPanel {
       EXPERIMENTS.map((experiment) => ({
         value: experiment,
         createNode: () =>
-          new Text(nameOf(experiment), { font: ITEM_FONT, fill: LIGHT_SURFACE_TEXT_FILL, maxWidth: innerWidth - 40 }),
+          new Text(nameOf(experiment), {
+            font: ITEM_FONT,
+            fill: LIGHT_SURFACE_TEXT_FILL,
+            maxWidth: innerWidth - EXPERIMENT_PANEL_SETTINGS.COMBO_BOX_MAX_WIDTH_OFFSET,
+          }),
         tandemName: `experiment${experiment}Item`,
       })),
       listParent,
       {
         ...BACKWARD_ACCELERATION_COMBO_BOX_OPTIONS,
-        xMargin: 8,
-        yMargin: 4,
+        xMargin: EXPERIMENT_PANEL_SETTINGS.COMBO_BOX_X_MARGIN,
+        yMargin: EXPERIMENT_PANEL_SETTINGS.COMBO_BOX_Y_MARGIN,
         accessibleName: strings.getControlsA11yStrings().experimentStringProperty,
       },
     );
@@ -67,7 +72,7 @@ export class ExperimentPanel extends BackwardAccelerationPanel {
     super(
       new VBox({
         align: "left",
-        spacing: 6,
+        spacing: EXPERIMENT_PANEL_SETTINGS.CONSTRUCTOR_SPACING,
         children: [
           new Text(labels.experimentStringProperty, {
             font: TITLE_FONT,

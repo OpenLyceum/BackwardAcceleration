@@ -1,3 +1,4 @@
+import { RECORDING_PANEL_SETTINGS } from "../../BackwardAccelerationConstants.js";
 /**
  * RecordingPanel.ts
  *
@@ -22,8 +23,8 @@ import { BackwardAccelerationPanel } from "../../common/BackwardAccelerationPane
 import { StringManager } from "../../i18n/StringManager.js";
 import type { SmartCartModel } from "../model/SmartCartModel.js";
 
-const FONT = new PhetFont(12);
-const BUTTON_FONT = new PhetFont({ size: 14, weight: "bold" });
+const FONT = new PhetFont(RECORDING_PANEL_SETTINGS.FONT_FONT_SIZE);
+const BUTTON_FONT = new PhetFont({ size: RECORDING_PANEL_SETTINGS.BUTTON_FONT_SIZE, weight: "bold" });
 
 export class RecordingPanel extends BackwardAccelerationPanel {
   public readonly focusOrder: readonly Node[];
@@ -41,14 +42,22 @@ export class RecordingPanel extends BackwardAccelerationPanel {
     const recordButton = new RectangularPushButton({
       ...FLAT_PANEL_PUSH_BUTTON_OPTIONS,
       baseColor: BackwardAccelerationColors.incorrectColorProperty,
-      content: new Text(recordLabel, { font: BUTTON_FONT, fill: "white", maxWidth: 90 }),
+      content: new Text(recordLabel, {
+        font: BUTTON_FONT,
+        fill: "white",
+        maxWidth: RECORDING_PANEL_SETTINGS.RECORD_BUTTON_MAX_WIDTH,
+      }),
       enabledProperty: model.canRecordProperty,
       accessibleName: a11y.recordStringProperty,
       listener: () => (model.isRecordingProperty.value ? model.stop() : model.record()),
     });
     const clearButton = new RectangularPushButton({
       ...FLAT_PANEL_PUSH_BUTTON_OPTIONS,
-      content: new Text(labels.clearRunStringProperty, { font: FONT, fill: LIGHT_SURFACE_TEXT_FILL, maxWidth: 90 }),
+      content: new Text(labels.clearRunStringProperty, {
+        font: FONT,
+        fill: LIGHT_SURFACE_TEXT_FILL,
+        maxWidth: RECORDING_PANEL_SETTINGS.CLEAR_BUTTON_MAX_WIDTH,
+      }),
       listener: () => model.clear(),
     });
 
@@ -65,7 +74,11 @@ export class RecordingPanel extends BackwardAccelerationPanel {
 
     const fullRecordingCheckbox = new Checkbox(
       model.runs.showFullRecordingProperty,
-      new Text(labels.showFullRecordingStringProperty, { font: FONT, fill, maxWidth: innerWidth - 30 }),
+      new Text(labels.showFullRecordingStringProperty, {
+        font: FONT,
+        fill,
+        maxWidth: innerWidth - RECORDING_PANEL_SETTINGS.FULL_RECORDING_CHECKBOX_MAX_WIDTH_OFFSET,
+      }),
       BACKWARD_ACCELERATION_CHECKBOX_OPTIONS,
     );
     const autoTrimButton = new RectangularPushButton({
@@ -73,13 +86,13 @@ export class RecordingPanel extends BackwardAccelerationPanel {
       content: new Text(labels.autoTrimStringProperty, {
         font: FONT,
         fill: LIGHT_SURFACE_TEXT_FILL,
-        maxWidth: innerWidth - 20,
+        maxWidth: innerWidth - RECORDING_PANEL_SETTINGS.AUTO_TRIM_BUTTON_MAX_WIDTH_OFFSET,
       }),
       enabledProperty: new DerivedProperty([model.isRecordingProperty], (recording) => !recording),
       listener: () => model.autoTrim(),
     });
     const trimHint = new RichText(labels.trimHintStringProperty, {
-      font: new PhetFont(11),
+      font: new PhetFont(RECORDING_PANEL_SETTINGS.TRIM_HINT_FONT_SIZE),
       fill,
       lineWrap: innerWidth,
     });
@@ -87,7 +100,7 @@ export class RecordingPanel extends BackwardAccelerationPanel {
       trimHint.visible = full;
     });
     const trimFailed = new RichText(labels.trimFailedStringProperty, {
-      font: new PhetFont(11),
+      font: new PhetFont(RECORDING_PANEL_SETTINGS.TRIM_FAILED_FONT_SIZE),
       fill: BackwardAccelerationColors.warningColorProperty,
       lineWrap: innerWidth,
     });
@@ -98,9 +111,9 @@ export class RecordingPanel extends BackwardAccelerationPanel {
     super(
       new VBox({
         align: "left",
-        spacing: 6,
+        spacing: RECORDING_PANEL_SETTINGS.CONSTRUCTOR_SPACING,
         children: [
-          new HBox({ spacing: 8, children: [recordButton, clearButton] }),
+          new HBox({ spacing: RECORDING_PANEL_SETTINGS.ITEM_1_SPACING, children: [recordButton, clearButton] }),
           recordingText,
           trimFailed,
           fullRecordingCheckbox,

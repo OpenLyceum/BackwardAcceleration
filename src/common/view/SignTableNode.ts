@@ -1,3 +1,4 @@
+import { SIGN_TABLE_NODE_SETTINGS } from "../../BackwardAccelerationConstants.js";
 /**
  * SignTableNode.ts
  *
@@ -26,13 +27,13 @@ import type { PredictionNotebook } from "../model/PredictionNotebook.js";
 import type { RunLibrary } from "../model/RunLibrary.js";
 import { type CellAnswer, SignTable } from "../model/SignTable.js";
 
-const TITLE_FONT = new PhetFont({ size: 14, weight: "bold" });
-const HEADER_FONT = new PhetFont(11);
-const CELL_FONT = new PhetFont({ size: 15, weight: "bold" });
-const MARK_FONT = new PhetFont({ size: 13, weight: "bold" });
-const CELL_WIDTH = 22;
-const ROW_LABEL_WIDTH = 46;
-const HEADER_WIDTH = 50;
+const TITLE_FONT = new PhetFont({ size: SIGN_TABLE_NODE_SETTINGS.TITLE_FONT_SIZE, weight: "bold" });
+const HEADER_FONT = new PhetFont(SIGN_TABLE_NODE_SETTINGS.HEADER_FONT_SIZE);
+const CELL_FONT = new PhetFont({ size: SIGN_TABLE_NODE_SETTINGS.CELL_FONT_SIZE, weight: "bold" });
+const MARK_FONT = new PhetFont({ size: SIGN_TABLE_NODE_SETTINGS.MARK_FONT_SIZE, weight: "bold" });
+const CELL_WIDTH: number = SIGN_TABLE_NODE_SETTINGS.CELL_WIDTH;
+const ROW_LABEL_WIDTH: number = SIGN_TABLE_NODE_SETTINGS.ROW_LABEL_WIDTH;
+const HEADER_WIDTH: number = SIGN_TABLE_NODE_SETTINGS.HEADER_WIDTH;
 
 export class SignTableNode extends BackwardAccelerationPanel {
   public readonly focusOrder: readonly Node[];
@@ -115,8 +116,8 @@ export class SignTableNode extends BackwardAccelerationPanel {
         ...FLAT_PANEL_PUSH_BUTTON_OPTIONS,
         content: new Text(symbol, { font: CELL_FONT, fill: LIGHT_SURFACE_TEXT_FILL }),
         minWidth: CELL_WIDTH,
-        xMargin: 6,
-        yMargin: 2,
+        xMargin: SIGN_TABLE_NODE_SETTINGS.BUTTON_X_MARGIN,
+        yMargin: SIGN_TABLE_NODE_SETTINGS.BUTTON_Y_MARGIN,
         accessibleName,
         accessibleHelpText: a11y.signCellHelpStringProperty,
         listener: () => SignTable.cycle(cellProperty),
@@ -132,7 +133,7 @@ export class SignTableNode extends BackwardAccelerationPanel {
         fill: textFill,
         lineWrap: HEADER_WIDTH,
         align: "center",
-        maxHeight: 30,
+        maxHeight: SIGN_TABLE_NODE_SETTINGS.HEADER_MAX_HEIGHT,
       });
 
     const rows: { button: RectangularPushButton; mark: Text }[][] = [
@@ -141,8 +142,8 @@ export class SignTableNode extends BackwardAccelerationPanel {
     ];
 
     const grid = new GridBox({
-      xSpacing: 4,
-      ySpacing: 6,
+      xSpacing: SIGN_TABLE_NODE_SETTINGS.GRID_X_SPACING,
+      ySpacing: SIGN_TABLE_NODE_SETTINGS.GRID_Y_SPACING,
       xAlign: "center",
       rows: [
         [null, ...phaseNames.map(header)],
@@ -150,8 +151,8 @@ export class SignTableNode extends BackwardAccelerationPanel {
           new RichText(r === 0 ? labels.velocityStringProperty : labels.accelerationStringProperty, {
             font: HEADER_FONT,
             fill: textFill,
-            lineWrap: ROW_LABEL_WIDTH + 30,
-            maxWidth: ROW_LABEL_WIDTH + 30,
+            lineWrap: ROW_LABEL_WIDTH + SIGN_TABLE_NODE_SETTINGS.GRID_LINE_WRAP_OFFSET,
+            maxWidth: ROW_LABEL_WIDTH + SIGN_TABLE_NODE_SETTINGS.GRID_MAX_WIDTH_OFFSET,
             layoutOptions: { xAlign: "left" },
           }),
           ...cells.map(
@@ -173,21 +174,29 @@ export class SignTableNode extends BackwardAccelerationPanel {
     });
     const checkbox = new Checkbox(
       checkProperty,
-      new Text(labels.checkAnswersStringProperty, { font: new PhetFont(12), fill: textFill, maxWidth: width - 60 }),
+      new Text(labels.checkAnswersStringProperty, {
+        font: new PhetFont(SIGN_TABLE_NODE_SETTINGS.CHECKBOX_FONT_SIZE),
+        fill: textFill,
+        maxWidth: width - SIGN_TABLE_NODE_SETTINGS.CHECKBOX_MAX_WIDTH_OFFSET,
+      }),
       BACKWARD_ACCELERATION_CHECKBOX_OPTIONS,
     );
     const noRunText = new Text(labels.noRunToCheckStringProperty, {
-      font: new PhetFont(11),
+      font: new PhetFont(SIGN_TABLE_NODE_SETTINGS.NO_RUN_TEXT_FONT_SIZE),
       fill: BackwardAccelerationColors.warningColorProperty,
-      maxWidth: width - 24,
+      maxWidth: width - SIGN_TABLE_NODE_SETTINGS.NO_RUN_TEXT_MAX_WIDTH_OFFSET,
     });
 
     super(
       new VBox({
         align: "left",
-        spacing: 6,
+        spacing: SIGN_TABLE_NODE_SETTINGS.CONSTRUCTOR_SPACING,
         children: [
-          new Text(labels.signTableStringProperty, { font: TITLE_FONT, fill: textFill, maxWidth: width - 24 }),
+          new Text(labels.signTableStringProperty, {
+            font: TITLE_FONT,
+            fill: textFill,
+            maxWidth: width - SIGN_TABLE_NODE_SETTINGS.CONSTRUCTOR_MAX_WIDTH_OFFSET,
+          }),
           grid,
           checkbox,
           noRunText,

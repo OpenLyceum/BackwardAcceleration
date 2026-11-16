@@ -1,3 +1,4 @@
+import { LAB_SCREEN_VIEW_SETTINGS } from "../../BackwardAccelerationConstants.js";
 /**
  * LabScreenView.ts
  *
@@ -41,10 +42,10 @@ import { TrackNode } from "./TrackNode.js";
 
 export type LabScreenViewOptions = ScreenViewOptions;
 
-const COLUMN_SPACING = 10;
-const BUTTON_FONT = new PhetFont({ size: 14, weight: "bold" });
-const READOUT_FONT = new PhetFont(13);
-const STATUS_FONT = new PhetFont(13);
+const COLUMN_SPACING: number = LAB_SCREEN_VIEW_SETTINGS.COLUMN_SPACING;
+const BUTTON_FONT = new PhetFont({ size: LAB_SCREEN_VIEW_SETTINGS.BUTTON_FONT_SIZE, weight: "bold" });
+const READOUT_FONT = new PhetFont(LAB_SCREEN_VIEW_SETTINGS.READOUT_FONT_SIZE);
+const STATUS_FONT = new PhetFont(LAB_SCREEN_VIEW_SETTINGS.STATUS_FONT_SIZE);
 
 export class LabScreenView extends ScreenView {
   public constructor(model: LabModel, providedOptions?: LabScreenViewOptions) {
@@ -92,14 +93,18 @@ export class LabScreenView extends ScreenView {
     const goButton = new RectangularPushButton({
       ...FLAT_PANEL_PUSH_BUTTON_OPTIONS,
       baseColor: BackwardAccelerationColors.measuredColorProperty,
-      content: new Text(goLabel, { font: BUTTON_FONT, fill: "white", maxWidth: 80 }),
+      content: new Text(goLabel, {
+        font: BUTTON_FONT,
+        fill: "white",
+        maxWidth: LAB_SCREEN_VIEW_SETTINGS.GO_BUTTON_MAX_WIDTH,
+      }),
       enabledProperty: new DerivedProperty([model.runStateProperty], (state) => state !== RunState.RUNNING),
       accessibleName: a11y.goStringProperty,
       listener: () => model.go(),
     });
     const catchButton = new RectangularPushButton({
       ...FLAT_PANEL_PUSH_BUTTON_OPTIONS,
-      content: buttonText(labels.catchStringProperty, 70),
+      content: buttonText(labels.catchStringProperty, LAB_SCREEN_VIEW_SETTINGS.CATCH_BUTTON_TEXT_MAX_WIDTH),
       enabledProperty: new DerivedProperty([model.runStateProperty], (state) => state === RunState.RUNNING),
       accessibleName: a11y.catchStringProperty,
       listener: () => model.stop(),
@@ -132,7 +137,7 @@ export class LabScreenView extends ScreenView {
           listener: () => model.stepOnce(),
         },
       },
-      scale: 0.85,
+      scale: LAB_SCREEN_VIEW_SETTINGS.TIME_CONTROL_SCALE,
     });
 
     const readout = (
@@ -142,23 +147,48 @@ export class LabScreenView extends ScreenView {
     ) =>
       new Text(
         new PatternStringProperty(pattern, { value }, { maps: { value: (v: number) => toFixed(v, decimals) } }),
-        { font: READOUT_FONT, fill: BackwardAccelerationColors.textColorProperty, maxWidth: 120 },
+        {
+          font: READOUT_FONT,
+          fill: BackwardAccelerationColors.textColorProperty,
+          maxWidth: LAB_SCREEN_VIEW_SETTINGS.READOUT_MAX_WIDTH,
+        },
       );
     const readouts = new VBox({
       align: "left",
-      spacing: 3,
+      spacing: LAB_SCREEN_VIEW_SETTINGS.READOUTS_SPACING,
       children: [
-        readout(labels.timeReadoutPatternStringProperty, model.runTimeProperty, 2),
-        readout(labels.positionReadoutPatternStringProperty, model.positionXProperty, 3),
-        readout(labels.velocityReadoutPatternStringProperty, model.velocityXProperty, 2),
-        readout(labels.accelerationReadoutPatternStringProperty, model.accelerationXProperty, 2),
+        readout(
+          labels.timeReadoutPatternStringProperty,
+          model.runTimeProperty,
+          LAB_SCREEN_VIEW_SETTINGS.READOUTS_DECIMALS,
+        ),
+        readout(
+          labels.positionReadoutPatternStringProperty,
+          model.positionXProperty,
+          LAB_SCREEN_VIEW_SETTINGS.POSITION_READOUT_PATTERN_READOUT_DECIMALS,
+        ),
+        readout(
+          labels.velocityReadoutPatternStringProperty,
+          model.velocityXProperty,
+          LAB_SCREEN_VIEW_SETTINGS.READOUTS_DECIMALS,
+        ),
+        readout(
+          labels.accelerationReadoutPatternStringProperty,
+          model.accelerationXProperty,
+          LAB_SCREEN_VIEW_SETTINGS.READOUTS_DECIMALS,
+        ),
       ],
     });
 
     const runControls = new BackwardAccelerationPanel(
       new VBox({
-        spacing: 8,
-        children: [new HBox({ spacing: 8, children: [goButton, catchButton] }), returnButton, timeControl, readouts],
+        spacing: LAB_SCREEN_VIEW_SETTINGS.RUN_CONTROLS_SPACING,
+        children: [
+          new HBox({ spacing: LAB_SCREEN_VIEW_SETTINGS.RUN_CONTROLS_SPACING, children: [goButton, catchButton] }),
+          returnButton,
+          timeControl,
+          readouts,
+        ],
       }),
       { minWidth: MIDDLE_COLUMN_WIDTH, maxWidth: MIDDLE_COLUMN_WIDTH },
     );
@@ -193,8 +223,8 @@ export class LabScreenView extends ScreenView {
       bottom: bounds.maxY - SCREEN_VIEW_MARGIN,
     });
 
-    statusText.left = middleColumn.right + COLUMN_SPACING + 4;
-    statusText.top = graphArea.bottom + 4;
+    statusText.left = middleColumn.right + COLUMN_SPACING + LAB_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_LEFT_OFFSET;
+    statusText.top = graphArea.bottom + LAB_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_TOP_OFFSET;
 
     this.children = [
       leftColumn,

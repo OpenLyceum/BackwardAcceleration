@@ -1,3 +1,4 @@
+import { SMART_CART_PANEL_SETTINGS } from "../../BackwardAccelerationConstants.js";
 /**
  * SmartCartPanel.ts
  *
@@ -26,7 +27,7 @@ import backwardAccelerationQueryParameters from "../../preferences/backwardAccel
 import { BluetoothStatus, type BluetoothStatusValue } from "../model/bluetoothSupport.js";
 import { ConnectionState, type SmartCartChannel } from "../model/SmartCartChannel.js";
 
-const FONT = new PhetFont(12);
+const FONT = new PhetFont(SMART_CART_PANEL_SETTINGS.FONT_FONT_SIZE);
 
 export class SmartCartPanel extends BackwardAccelerationPanel {
   public readonly focusOrder: readonly Node[];
@@ -72,9 +73,9 @@ export class SmartCartPanel extends BackwardAccelerationPanel {
     const connectButton = new RectangularPushButton({
       ...FLAT_PANEL_PUSH_BUTTON_OPTIONS,
       content: new Text(buttonLabel, {
-        font: new PhetFont({ size: 13, weight: "bold" }),
+        font: new PhetFont({ size: SMART_CART_PANEL_SETTINGS.CONNECT_BUTTON_FONT_SIZE, weight: "bold" }),
         fill: LIGHT_SURFACE_TEXT_FILL,
-        maxWidth: 100,
+        maxWidth: SMART_CART_PANEL_SETTINGS.CONNECT_BUTTON_MAX_WIDTH,
       }),
       enabledProperty: canPress,
       accessibleName: a11y.connectStringProperty,
@@ -93,7 +94,7 @@ export class SmartCartPanel extends BackwardAccelerationPanel {
       new Text(labels.changeSignStringProperty, {
         font: FONT,
         fill: BackwardAccelerationColors.textColorProperty,
-        maxWidth: innerWidth - 30,
+        maxWidth: innerWidth - SMART_CART_PANEL_SETTINGS.CHANGE_SIGN_CHECKBOX_MAX_WIDTH_OFFSET,
       }),
       { ...BACKWARD_ACCELERATION_CHECKBOX_OPTIONS, accessibleName: a11y.changeSignStringProperty },
     );
@@ -108,29 +109,29 @@ export class SmartCartPanel extends BackwardAccelerationPanel {
     super(
       new VBox({
         align: "left",
-        spacing: 5,
+        spacing: SMART_CART_PANEL_SETTINGS.CONSTRUCTOR_SPACING,
         children: [
           new HBox({
-            spacing: 10,
+            spacing: SMART_CART_PANEL_SETTINGS.ITEM_1_SPACING,
             children: [
               new Text(labels.smartCartStringProperty, {
-                font: new PhetFont({ size: 14, weight: "bold" }),
+                font: new PhetFont({ size: SMART_CART_PANEL_SETTINGS.CONSTRUCTOR_FONT_SIZE, weight: "bold" }),
                 fill: BackwardAccelerationColors.cartBodyColorProperty,
-                maxWidth: 100,
+                maxWidth: SMART_CART_PANEL_SETTINGS.CONSTRUCTOR_MAX_WIDTH,
               }),
               connectButton,
             ],
           }),
           new Text(status, { font: FONT, fill: BackwardAccelerationColors.textColorProperty, maxWidth: innerWidth }),
           new Text(error, {
-            font: new PhetFont(11),
+            font: new PhetFont(SMART_CART_PANEL_SETTINGS.PHET_FONT_FONT_SIZE),
             fill: BackwardAccelerationColors.warningColorProperty,
             maxWidth: innerWidth,
           }),
           ...(unsupportedMessage
             ? [
                 new RichText(unsupportedMessage, {
-                  font: new PhetFont(11),
+                  font: new PhetFont(SMART_CART_PANEL_SETTINGS.PHET_FONT_FONT_SIZE),
                   fill: BackwardAccelerationColors.warningColorProperty,
                   lineWrap: innerWidth,
                 }),
@@ -141,7 +142,7 @@ export class SmartCartPanel extends BackwardAccelerationPanel {
           ...(backwardAccelerationQueryParameters.showDiagnostics
             ? [
                 new Text(channel.diagnosticProperty, {
-                  font: new PhetFont(10),
+                  font: new PhetFont(SMART_CART_PANEL_SETTINGS.PHET_FONT_FONT_SIZE_SEGMENT_2),
                   fill: BackwardAccelerationColors.warningColorProperty,
                   maxWidth: innerWidth,
                 }),

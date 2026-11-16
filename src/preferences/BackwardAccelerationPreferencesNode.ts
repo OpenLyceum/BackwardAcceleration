@@ -1,3 +1,4 @@
+import { BACKWARD_ACCELERATION_PREFERENCES_NODE_SETTINGS } from "../BackwardAccelerationConstants.js";
 /**
  * BackwardAccelerationPreferencesNode.ts
  *
@@ -19,7 +20,7 @@ import {
   type BackwardAccelerationPreferencesModel,
 } from "./BackwardAccelerationPreferencesModel.js";
 
-const LABEL_FONT = new PhetFont(14);
+const LABEL_FONT = new PhetFont(BACKWARD_ACCELERATION_PREFERENCES_NODE_SETTINGS.LABEL_FONT_SIZE);
 
 export class BackwardAccelerationPreferencesNode extends VBox {
   public constructor(preferencesModel: BackwardAccelerationPreferencesModel, tandem?: Tandem) {
@@ -30,17 +31,20 @@ export class BackwardAccelerationPreferencesNode extends VBox {
     const fill = BackwardAccelerationColors.controlSurfaceTextColorProperty;
 
     const header = new Text(prefStrings.titleStringProperty, {
-      font: new PhetFont({ size: 18, weight: "bold" }),
+      font: new PhetFont({ size: BACKWARD_ACCELERATION_PREFERENCES_NODE_SETTINGS.HEADER_FONT_SIZE, weight: "bold" }),
       fill,
     });
     const smoothingLabel = new Text(prefStrings.accelerationSmoothingStringProperty, {
-      font: new PhetFont({ size: 14, weight: "bold" }),
+      font: new PhetFont({
+        size: BACKWARD_ACCELERATION_PREFERENCES_NODE_SETTINGS.SMOOTHING_LABEL_FONT_SIZE,
+        weight: "bold",
+      }),
       fill,
     });
     const description = new RichText(prefStrings.accelerationSmoothingDescriptionStringProperty, {
-      font: new PhetFont(12),
+      font: new PhetFont(BACKWARD_ACCELERATION_PREFERENCES_NODE_SETTINGS.DESCRIPTION_FONT_SIZE),
       fill,
-      lineWrap: 420,
+      lineWrap: BACKWARD_ACCELERATION_PREFERENCES_NODE_SETTINGS.DESCRIPTION_LINE_WRAP,
     });
 
     // The model property is a free integer (query parameters may set any odd window); the
@@ -69,7 +73,7 @@ export class BackwardAccelerationPreferencesNode extends VBox {
       })),
       {
         orientation: "vertical",
-        spacing: 6,
+        spacing: BACKWARD_ACCELERATION_PREFERENCES_NODE_SETTINGS.RADIO_GROUP_SPACING,
         radioButtonOptions: { stroke: fill },
         accessibleName: prefStrings.accelerationSmoothingStringProperty,
         ...(tandem && { tandem: tandem.createTandem("accelerationSmoothingRadioButtonGroup") }),
@@ -78,7 +82,7 @@ export class BackwardAccelerationPreferencesNode extends VBox {
 
     super({
       align: "left",
-      spacing: 10,
+      spacing: BACKWARD_ACCELERATION_PREFERENCES_NODE_SETTINGS.CONSTRUCTOR_SPACING,
       children: [header, smoothingLabel, description, radioGroup],
     });
   }
