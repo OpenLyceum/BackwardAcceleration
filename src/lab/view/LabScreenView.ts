@@ -95,7 +95,7 @@ export class LabScreenView extends ScreenView {
       baseColor: BackwardAccelerationColors.measuredColorProperty,
       content: new Text(goLabel, {
         font: BUTTON_FONT,
-        fill: "white",
+        fill: BackwardAccelerationColors.accentButtonTextColorProperty,
         maxWidth: LAB_SCREEN_VIEW_SETTINGS.GO_BUTTON_MAX_WIDTH,
       }),
       enabledProperty: new DerivedProperty([model.runStateProperty], (state) => state !== RunState.RUNNING),

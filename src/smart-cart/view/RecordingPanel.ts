@@ -44,7 +44,7 @@ export class RecordingPanel extends BackwardAccelerationPanel {
       baseColor: BackwardAccelerationColors.incorrectColorProperty,
       content: new Text(recordLabel, {
         font: BUTTON_FONT,
-        fill: "white",
+        fill: BackwardAccelerationColors.accentButtonTextColorProperty,
         maxWidth: RECORDING_PANEL_SETTINGS.RECORD_BUTTON_MAX_WIDTH,
       }),
       enabledProperty: model.canRecordProperty,
