@@ -223,8 +223,8 @@ export class LabScreenView extends ScreenView {
       bottom: bounds.maxY - SCREEN_VIEW_MARGIN,
     });
 
-    statusText.left = middleColumn.right + COLUMN_SPACING + LAB_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_LEFT_OFFSET;
-    statusText.top = graphArea.bottom + LAB_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_TOP_OFFSET;
+    statusText.left = middleColumn.right + COLUMN_SPACING + LAB_SCREEN_VIEW_SETTINGS.STATUS_LEFT_GAP;
+    statusText.top = graphArea.bottom + LAB_SCREEN_VIEW_SETTINGS.STATUS_TOP_GAP;
 
     this.children = [
       leftColumn,

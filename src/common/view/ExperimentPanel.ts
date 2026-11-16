@@ -72,7 +72,7 @@ export class ExperimentPanel extends BackwardAccelerationPanel {
     super(
       new VBox({
         align: "left",
-        spacing: EXPERIMENT_PANEL_SETTINGS.CONSTRUCTOR_SPACING,
+        spacing: EXPERIMENT_PANEL_SETTINGS.SPACING,
         children: [
           new Text(labels.experimentStringProperty, {
             font: TITLE_FONT,

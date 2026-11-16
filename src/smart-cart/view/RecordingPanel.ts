@@ -111,7 +111,7 @@ export class RecordingPanel extends BackwardAccelerationPanel {
     super(
       new VBox({
         align: "left",
-        spacing: RECORDING_PANEL_SETTINGS.CONSTRUCTOR_SPACING,
+        spacing: RECORDING_PANEL_SETTINGS.SPACING,
         children: [
           new HBox({ spacing: RECORDING_PANEL_SETTINGS.ITEM_1_SPACING, children: [recordButton, clearButton] }),
           recordingText,

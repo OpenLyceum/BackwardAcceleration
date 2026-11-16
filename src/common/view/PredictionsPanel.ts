@@ -99,7 +99,7 @@ export class PredictionsPanel extends BackwardAccelerationPanel {
     super(
       new VBox({
         align: "left",
-        spacing: PREDICTIONS_PANEL_SETTINGS.CONSTRUCTOR_SPACING,
+        spacing: PREDICTIONS_PANEL_SETTINGS.SPACING,
         children: [
           new Text(labels.predictionsStringProperty, {
             font: TITLE_FONT,

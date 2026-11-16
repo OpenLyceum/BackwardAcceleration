@@ -82,7 +82,7 @@ export class BackwardAccelerationPreferencesNode extends VBox {
 
     super({
       align: "left",
-      spacing: BACKWARD_ACCELERATION_PREFERENCES_NODE_SETTINGS.CONSTRUCTOR_SPACING,
+      spacing: BACKWARD_ACCELERATION_PREFERENCES_NODE_SETTINGS.SPACING,
       children: [header, smoothingLabel, description, radioGroup],
     });
   }

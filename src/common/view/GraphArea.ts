@@ -143,12 +143,12 @@ export class GraphArea extends VBox {
       align: "right",
       children: [
         new HBox({
-          spacing: GRAPH_AREA_SETTINGS.CONSTRUCTOR_SPACING,
+          spacing: GRAPH_AREA_SETTINGS.SPACING,
           align: "center",
           children: [velocityGraph, velocityZoom],
         }),
         new HBox({
-          spacing: GRAPH_AREA_SETTINGS.CONSTRUCTOR_SPACING,
+          spacing: GRAPH_AREA_SETTINGS.SPACING,
           align: "center",
           children: [accelerationGraph, accelerationZoom],
         }),

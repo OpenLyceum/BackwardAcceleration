@@ -190,12 +190,12 @@ export class SignTableNode extends BackwardAccelerationPanel {
     super(
       new VBox({
         align: "left",
-        spacing: SIGN_TABLE_NODE_SETTINGS.CONSTRUCTOR_SPACING,
+        spacing: SIGN_TABLE_NODE_SETTINGS.SPACING,
         children: [
           new Text(labels.signTableStringProperty, {
             font: TITLE_FONT,
             fill: textFill,
-            maxWidth: width - SIGN_TABLE_NODE_SETTINGS.CONSTRUCTOR_MAX_WIDTH_OFFSET,
+            maxWidth: width - SIGN_TABLE_NODE_SETTINGS.TITLE_MAX_WIDTH_OFFSET,
           }),
           grid,
           checkbox,

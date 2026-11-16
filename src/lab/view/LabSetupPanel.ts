@@ -208,7 +208,7 @@ export class LabSetupPanel extends BackwardAccelerationPanel {
     super(
       new VBox({
         align: "left",
-        spacing: LAB_SETUP_PANEL_SETTINGS.CONSTRUCTOR_SPACING,
+        spacing: LAB_SETUP_PANEL_SETTINGS.SPACING,
         children: [
           new Text(labels.setUpStringProperty, { font: TITLE_FONT, fill, maxWidth: innerWidth }),
           heightControl,

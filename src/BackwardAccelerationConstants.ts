@@ -116,15 +116,15 @@ export const BACKWARD_ACCELERATION_PANEL_SETTINGS = {
 
 /** Settings for common/BackwardAccelerationScreenIcons.ts. Layout lengths are in px; counts and ratios are dimensionless. */
 export const BACKWARD_ACCELERATION_SCREEN_ICONS_SETTINGS = {
-  TRACK_X_SEGMENT_2: 508, // px
+  TRACK_END_X: 508, // px
   TRACK_X_LINE_TO_Y: 274, // px
   CART_NODE_WIDTH: 170, // px
-  CART_NODE_START_X_SEGMENT_2: 30, // px
-  CART_NODE_START_Y_SEGMENT_2: -140, // px
-  CART_NODE_END_X_SEGMENT_2: -100, // px
-  CART_NODE_END_Y_SEGMENT_2: -140, // px
-  AXES_Y_SEGMENT_2: 345, // px
-  CART_NODE_WIDTH_SEGMENT_2: 190, // px
+  ACCEL_ARROW_START_X: 30, // px
+  ACCEL_ARROW_START_Y: -140, // px
+  ACCEL_ARROW_END_X: -100, // px
+  ACCEL_ARROW_END_Y: -140, // px
+  AXES_BOTTOM_Y: 345, // px
+  SMART_CART_ICON_CART_WIDTH: 190, // px
 
   CART_X_FACTOR: 0.32, // dimensionless
   CART_NODE_Y_OFFSET: 260, // px
@@ -204,7 +204,7 @@ export const EXPERIMENT_PANEL_SETTINGS = {
   INSTRUCTION_FONT_SIZE: 12,
   COMBO_BOX_X_MARGIN: 8,
   COMBO_BOX_Y_MARGIN: 4,
-  CONSTRUCTOR_SPACING: 6,
+  SPACING: 6,
 } as const;
 
 /** Settings for common/view/GraphArea.ts. Layout lengths are in px; counts and ratios are dimensionless. */
@@ -218,7 +218,7 @@ export const GRAPH_AREA_SETTINGS = {
   LEGEND_ITEM_LINE_WIDTH: 2.5,
   LEGEND_ITEM_MAX_WIDTH: 120,
   LEGEND_SPACING: 16,
-  CONSTRUCTOR_SPACING: 6,
+  SPACING: 6,
 } as const;
 
 /** Settings for common/view/KinematicsGraphNode.ts. Layout lengths are in px; counts and ratios are dimensionless. */
@@ -261,7 +261,7 @@ export const PREDICTIONS_PANEL_SETTINGS = {
   DRAW_MODE_GROUP_RADIUS: 7,
   ERASE_BUTTON_X_MARGIN: 6,
   ERASE_BUTTON_Y_MARGIN: 3,
-  CONSTRUCTOR_SPACING: 7,
+  SPACING: 7,
 } as const;
 
 /** Settings for common/view/SignTableNode.ts. Layout lengths are in px; counts and ratios are dimensionless. */
@@ -270,7 +270,7 @@ export const SIGN_TABLE_NODE_SETTINGS = {
   GRID_MAX_WIDTH_OFFSET: 30, // px
   CHECKBOX_MAX_WIDTH_OFFSET: 60, // px
   NO_RUN_TEXT_MAX_WIDTH_OFFSET: 24, // px
-  CONSTRUCTOR_MAX_WIDTH_OFFSET: 24, // px
+  TITLE_MAX_WIDTH_OFFSET: 24, // px
 
   TITLE_FONT_SIZE: 14,
   HEADER_FONT_SIZE: 11,
@@ -286,7 +286,7 @@ export const SIGN_TABLE_NODE_SETTINGS = {
   GRID_Y_SPACING: 6,
   CHECKBOX_FONT_SIZE: 12,
   NO_RUN_TEXT_FONT_SIZE: 11,
-  CONSTRUCTOR_SPACING: 6,
+  SPACING: 6,
 } as const;
 
 /** Settings for lab/model/LabModel.ts. */
@@ -311,8 +311,8 @@ export const LAB_SCREEN_VIEW_SETTINGS = {
   READOUTS_DECIMALS: 2, // digits
   POSITION_READOUT_PATTERN_READOUT_DECIMALS: 3, // digits
 
-  CONSTRUCTOR_LEFT_OFFSET: 4, // px
-  CONSTRUCTOR_TOP_OFFSET: 4, // px
+  STATUS_LEFT_GAP: 4, // px
+  STATUS_TOP_GAP: 4, // px
 
   COLUMN_SPACING: 10,
   BUTTON_FONT_SIZE: 14,
@@ -351,7 +351,7 @@ export const LAB_SETUP_PANEL_SETTINGS = {
   /** Push speed control keyboard step (dimensionless). */
   PUSH_SPEED_CONTROL_KEYBOARD_STEP: 0.05,
   HEADING_FONT_SIZE: 12,
-  CONSTRUCTOR_SPACING: 6,
+  SPACING: 6,
 } as const;
 
 /** Settings for lab/view/TrackNode.ts. Layout lengths are in px; counts and ratios are dimensionless. */
@@ -417,7 +417,7 @@ export const BACKWARD_ACCELERATION_PREFERENCES_NODE_SETTINGS = {
   SMOOTHING_LABEL_FONT_SIZE: 14,
   DESCRIPTION_FONT_SIZE: 12,
   RADIO_GROUP_SPACING: 6,
-  CONSTRUCTOR_SPACING: 10,
+  SPACING: 10,
 } as const;
 
 /** Settings for smart-cart/model/BluetoothSmartCart.ts. */
@@ -473,7 +473,7 @@ export const RECORDING_PANEL_SETTINGS = {
   CLEAR_BUTTON_MAX_WIDTH: 90,
   TRIM_HINT_FONT_SIZE: 11,
   TRIM_FAILED_FONT_SIZE: 11,
-  CONSTRUCTOR_SPACING: 6,
+  SPACING: 6,
 } as const;
 
 /** Settings for smart-cart/view/SmartCartPanel.ts. Layout lengths are in px; counts and ratios are dimensionless. */
@@ -489,9 +489,9 @@ export const SMART_CART_PANEL_SETTINGS = {
   FONT_SIZE: 12,
   CONNECT_BUTTON_FONT_SIZE: 13,
   CONNECT_BUTTON_MAX_WIDTH: 100,
-  CONSTRUCTOR_SPACING: 5,
-  CONSTRUCTOR_FONT_SIZE: 14,
-  CONSTRUCTOR_MAX_WIDTH: 100,
+  SPACING: 5,
+  TITLE_FONT_SIZE: 14,
+  TITLE_MAX_WIDTH: 100,
 } as const;
 
 /** Settings for smart-cart/view/SmartCartScreenView.ts. Layout lengths are in px; counts and ratios are dimensionless. */
