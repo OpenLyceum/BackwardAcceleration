@@ -12,6 +12,10 @@ import { BLUETOOTH_SMART_CART_SETTINGS } from "../../BackwardAccelerationConstan
  *
  * The library (and the mathjs it depends on) is loaded on demand, the first time a
  * Smart Cart screen is built, so the Lab screen never pays for it.
+ *
+ * Keep protocol logic in sync with CartCollisions
+ * `src/smart-carts/model/BluetoothSmartCart.ts` (sim-specific import + screen
+ * wording only).
  */
 
 import type { PASCOBLEDevice as PascoDevice } from "pasco-ble";
