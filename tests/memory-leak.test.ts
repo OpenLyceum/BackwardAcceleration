@@ -16,6 +16,7 @@ import { RunLibrary } from "../src/common/model/RunLibrary.js";
 import { SignTable } from "../src/common/model/SignTable.js";
 import { Trace } from "../src/common/model/Trace.js";
 import { BackwardAccelerationPreferencesModel } from "../src/preferences/BackwardAccelerationPreferencesModel.js";
+import { SmartCartChannel } from "../src/smart-cart/model/SmartCartChannel.js";
 import { SmartCartModel } from "../src/smart-cart/model/SmartCartModel.js";
 import { FakeSmartCart } from "./helpers/FakeSmartCart.js";
 import { describeDisposalLeaks } from "./helpers/memoryLeak.js";
@@ -37,4 +38,5 @@ describeDisposalLeaks([
     name: "SmartCartModel",
     create: () => new SmartCartModel(new PredictionNotebook(), smoothing, { createDevice: () => new FakeSmartCart() }),
   },
+  { name: "SmartCartChannel", create: () => new SmartCartChannel(new FakeSmartCart()) },
 ]);
