@@ -74,8 +74,6 @@ equivalent** (each cell is a button announcing quantity, phase and answer).
 
 ## Compliance carve-outs
 
-- `tests/generators.test.ts` removed: it tested the template's `rename` /
-  `scaffold-screens` scripts, which `check-template-drift --fix` removes from a sim.
 - `TimeModel` removed: the Lab model keeps its own run clock (sampling on a 20 ms grid
   inside 1 ms physics substeps); the Smart Cart screen has no clock.
 - `pasco-ble` is appended after the shared dependency block (same pin as CartCollisions).
