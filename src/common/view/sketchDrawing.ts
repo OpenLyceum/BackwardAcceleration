@@ -54,6 +54,8 @@ export function installSketchDrawing(
     const local = chartRectangle.globalToLocalPoint(globalPoint);
     return chartTransform.viewToModelPosition(new Vector2(clamp(local.x, 0, viewWidth), clamp(local.y, 0, viewHeight)));
   };
+  // Pointer-only: freehand sketching has no keyboard analogue. The sign table is its keyboard
+  // equivalent (see AGENTS.md, Accessibility).
   chartRectangle.addInputListener(
     new DragListener({
       start: (event) => {
