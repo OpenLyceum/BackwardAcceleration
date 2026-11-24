@@ -9,7 +9,7 @@ import { LAB_SETUP_PANEL_SETTINGS } from "../../BackwardAccelerationConstants.js
  */
 
 import { DerivedProperty, NumberProperty } from "scenerystack/axon";
-import { Range } from "scenerystack/dot";
+import { Range, roundSymmetric } from "scenerystack/dot";
 import { HBox, type Node, Text, VBox } from "scenerystack/scenery";
 import { NumberControl, PhetFont } from "scenerystack/scenery-phet";
 import { AquaRadioButtonGroup, Checkbox } from "scenerystack/sun";
@@ -84,7 +84,7 @@ export class LabSetupPanel extends BackwardAccelerationPanel {
         sliderOptions: {
           ...BACKWARD_ACCELERATION_NUMBER_CONTROL_OPTIONS.sliderOptions,
           keyboardStep: 1,
-          constrainValue: (value: number) => Math.round(value),
+          constrainValue: (value: number) => roundSymmetric(value),
           majorTicks: [0, 4, 8].map((value) => ({ value })),
           majorTickStroke: fill,
         },
@@ -173,7 +173,7 @@ export class LabSetupPanel extends BackwardAccelerationPanel {
         sliderOptions: {
           ...BACKWARD_ACCELERATION_NUMBER_CONTROL_OPTIONS.sliderOptions,
           keyboardStep: LAB_SETUP_PANEL_SETTINGS.PUSH_SPEED_CONTROL_KEYBOARD_STEP,
-          constrainValue: (value: number) => Math.round(value * 20) / 20,
+          constrainValue: (value: number) => roundSymmetric(value * 20) / 20,
         },
         accessibleName: a11y.pushSpeedStringProperty,
       },

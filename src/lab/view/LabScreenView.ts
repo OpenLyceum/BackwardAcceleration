@@ -84,7 +84,7 @@ export class LabScreenView extends ScreenView {
     const predictionsPanel = new PredictionsPanel(model.notebook, model.runs, MIDDLE_COLUMN_WIDTH);
     const signTable = new SignTableNode(model.notebook, model.runs, MIDDLE_COLUMN_WIDTH);
 
-    const goLabel = new DerivedProperty(
+    const goLabelProperty = new DerivedProperty(
       [model.launchModeProperty, labels.releaseStringProperty, labels.letGoStringProperty],
       (mode, release, push) => (mode === LaunchMode.PUSH ? push : release),
     );
@@ -93,7 +93,7 @@ export class LabScreenView extends ScreenView {
     const goButton = new RectangularPushButton({
       ...FLAT_PANEL_PUSH_BUTTON_OPTIONS,
       baseColor: BackwardAccelerationColors.measuredColorProperty,
-      content: new Text(goLabel, {
+      content: new Text(goLabelProperty, {
         font: BUTTON_FONT,
         fill: BackwardAccelerationColors.accentButtonTextColorProperty,
         maxWidth: LAB_SCREEN_VIEW_SETTINGS.GO_BUTTON_MAX_WIDTH,
