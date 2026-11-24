@@ -85,7 +85,7 @@ export class SignTableNode extends BackwardAccelerationPanel {
           bidirectional: true,
         },
       );
-      const symbol = new DerivedProperty(
+      const symbolProperty = new DerivedProperty(
         [
           cellProperty,
           labels.signPositiveStringProperty,
@@ -95,7 +95,7 @@ export class SignTableNode extends BackwardAccelerationPanel {
         ],
         symbolFor,
       );
-      const accessibleName = new DerivedProperty(
+      const accessibleNameProperty = new DerivedProperty(
         [
           cellProperty,
           quantityName,
@@ -114,11 +114,11 @@ export class SignTableNode extends BackwardAccelerationPanel {
       );
       const button = new RectangularPushButton({
         ...FLAT_PANEL_PUSH_BUTTON_OPTIONS,
-        content: new Text(symbol, { font: CELL_FONT, fill: LIGHT_SURFACE_TEXT_FILL }),
+        content: new Text(symbolProperty, { font: CELL_FONT, fill: LIGHT_SURFACE_TEXT_FILL }),
         minWidth: CELL_WIDTH,
         xMargin: SIGN_TABLE_NODE_SETTINGS.BUTTON_X_MARGIN,
         yMargin: SIGN_TABLE_NODE_SETTINGS.BUTTON_Y_MARGIN,
-        accessibleName,
+        accessibleName: accessibleNameProperty,
         accessibleHelpText: a11y.signCellHelpStringProperty,
         listener: () => SignTable.cycle(cellProperty),
       });

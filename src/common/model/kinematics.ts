@@ -1,3 +1,5 @@
+import { roundSymmetric } from "scenerystack/dot";
+
 /**
  * kinematics.ts
  *
@@ -55,7 +57,7 @@ export function differentiate(times: readonly number[], values: readonly number[
 
 /** Rounds `position` to the nearest whole encoder count of size `resolution`. */
 export function quantize(position: number, resolution: number): number {
-  return Math.round(position / resolution) * resolution;
+  return roundSymmetric(position / resolution) * resolution;
 }
 
 /** Median of a non-empty list (NaN when empty). */

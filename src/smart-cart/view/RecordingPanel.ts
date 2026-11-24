@@ -35,14 +35,14 @@ export class RecordingPanel extends BackwardAccelerationPanel {
     const innerWidth = width - 24;
     const fill = BackwardAccelerationColors.textColorProperty;
 
-    const recordLabel = new DerivedProperty(
+    const recordLabelProperty = new DerivedProperty(
       [model.isRecordingProperty, labels.recordStringProperty, labels.stopRecordingStringProperty],
       (recording, record, stop) => (recording ? stop : record),
     );
     const recordButton = new RectangularPushButton({
       ...FLAT_PANEL_PUSH_BUTTON_OPTIONS,
       baseColor: BackwardAccelerationColors.incorrectColorProperty,
-      content: new Text(recordLabel, {
+      content: new Text(recordLabelProperty, {
         font: BUTTON_FONT,
         fill: BackwardAccelerationColors.accentButtonTextColorProperty,
         maxWidth: RECORDING_PANEL_SETTINGS.RECORD_BUTTON_MAX_WIDTH,
