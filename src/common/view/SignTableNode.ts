@@ -118,7 +118,7 @@ export class SignTableNode extends BackwardAccelerationPanel {
         minWidth: CELL_WIDTH,
         xMargin: SIGN_TABLE_NODE_SETTINGS.BUTTON_X_MARGIN,
         yMargin: SIGN_TABLE_NODE_SETTINGS.BUTTON_Y_MARGIN,
-        accessibleNameProperty,
+        accessibleName: accessibleNameProperty,
         accessibleHelpText: a11y.signCellHelpStringProperty,
         listener: () => SignTable.cycle(cellProperty),
       });
