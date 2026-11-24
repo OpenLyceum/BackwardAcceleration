@@ -48,7 +48,9 @@ const backwardAccelerationQueryParameters = QueryStringMachine.getAll({
 
   /** Shows raw stream statistics (counts, packets, missed packets, sample rate) under the Smart Cart status. */
   showDiagnostics: {
-    type: "flag",
+    type: "custom",
+    defaultValue: false,
+    parse: (value: string | null): boolean => value === null || value === "true",
     public: true,
   },
 });
